@@ -237,3 +237,19 @@ li{
     cursor: pointer;
   }
   
+
+  .map-container {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  #map {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    z-index: 1;
+  }
+  
