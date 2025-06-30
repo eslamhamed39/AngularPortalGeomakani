@@ -1,0 +1,174 @@
+/* ===== Login page Styles ===== */
+
+body {
+    background-color: #fcfcfc;
+    background-image: url(https://i.ibb.co/G0JtHXB/satellite-imagery-of-africa-desktop-wallpaper.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    overflow: hidden;
+    user-select: none;
+  }
+  
+  /* صندوق تسجيل الدخول */
+  .container_input {
+    height: 520px;
+    width: 400px;
+    background-color: rgba(255, 255, 255, 0.63);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 50px;
+    backdrop-filter: blur(1px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+    padding: 15px 35px;
+    z-index: 10;
+  }
+  
+  .container_input * {
+    font-family: 'Poppins', sans-serif;
+    color: #495057;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+  }
+  
+  .container_input h3 {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 42px;
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  input {
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.219) !important;
+    border-radius: 50px;
+    padding: 0 20px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 300;
+  }
+  
+  input:focus {
+    border: 1px solid #216bc0;
+  }
+  
+  input:valid {
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #216bc0;
+    box-shadow: inset 0 0 20px 20px #23232329;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-background-clip: text;
+  }
+  
+  ::placeholder {
+    color: #e5e5e5;
+  }
+  
+  /* زر الدخول */
+  .btn_login1 {
+    margin-top: 30px;
+    width: 60%;
+    text-align: center;
+    background: linear-gradient(to left, #EE4037, #F9AE42);
+    color: #fcfcfc !important;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 100px;
+    cursor: pointer;
+    border: 2px solid #fff !important;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .btn_login1:hover {
+    border: 2px solid #EE4037 !important;
+    background: #fff;
+    color: #EE4037 !important;
+    filter: drop-shadow(#67aabb 0.5px 0.5px 3px);
+  }
+  
+  /* الرسائل */
+  .status,
+  .redMessage {
+    margin-top: 5px;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    color: rgb(255, 0, 0);
+    font-weight: 800;
+    border: 2px solid rgb(255, 0, 0);
+    border-radius: 50px;
+    padding: 2px;
+    left: 0;
+  }
+  
+  .status:empty,
+  .redMessage:empty {
+    border: none;
+  }
+  
+  .login_Success {
+    margin-top: 15px;
+    width: 100%;
+    color: rgb(0, 255, 0);
+    font-weight: 800;
+    text-align: center;
+    border: 2px solid rgb(0, 255, 0);
+    border-radius: 50px;
+  }
+  
+  .login_Success:empty {
+    border: none;
+    background-color: transparent;
+  }
+  
+  .Message {
+    width: 100%;
+    margin: auto;
+    position: relative;
+  }
+  
+  /* صورة اللوجو في login */
+  .image {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #loginPage .image img {
+    width: 70%;
+  }
+  
+  .btn_1 {
+    text-align: center;
+  }
+  
+  .login-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    background-image: url('https://i.ibb.co/G0JtHXB/satellite-imagery-of-africa-desktop-wallpaper.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    /* يمكنك إضافة فلتر أو لون فوق الخلفية إذا أردت */
+  }
+  

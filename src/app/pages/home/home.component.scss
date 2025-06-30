@@ -1,0 +1,239 @@
+/*--- Sidebar ---*/
+a{
+    list-style: none;
+    text-decoration: none;
+}
+li{
+    list-style: none;
+    width: 95%;
+    border-radius: 30px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    margin-bottom: 2px;
+    text-align: center;
+}
+
+.Side_bar {
+    width: 90px;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0, -50%);
+    background: #0000005c !important;
+    border: 2px solid #EE4037;
+    border-radius: 35px;
+    z-index: 11;
+    opacity: 1;
+  }
+  
+  .bg-light2 {
+    border-radius: 35px;
+    background-color: #ffffffb2 !important;
+  }
+  
+  .white_bg {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75px;
+    margin-bottom: 10px;
+  }
+  
+  /*--- Logo ---*/
+  .Side_v_logo {
+    text-align: center;
+    width: 80%;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    top: 15px;
+  }
+  
+  /*--- Sidebar icons list ---*/
+  .ul_icon_sidebar {
+    border-radius: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .ul_icon_sidebar li {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .ul_icon_sidebar .nav-link {
+    color: #EE4037 !important;
+    background: transparent;
+    border-radius: 30px;
+    padding: 0.75rem 0.5rem;
+    font-size: 1.5rem;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ul_icon_sidebar .nav-link.active,
+  .ul_icon_sidebar .nav-link:focus,
+  .ul_icon_sidebar .nav-link:hover {
+    color: #fff !important;
+    background-color: #00000054 !important;
+  }
+  
+  #icon_land {
+    width: 30px;
+    height: 30px;
+    background-image: url("https://i.ibb.co/xS2wWBRP/icons8-country-100.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    transition: background-image 0.2s;
+  }
+  
+  .detection_icon:hover #icon_land,
+  .detection_icon:focus #icon_land,
+  .detection_icon.active #icon_land {
+    background-image: url("https://img.icons8.com/ios/ffffff/country--v1.png");
+  }
+  
+  /*--- Detection side menu ---*/
+  .list_detection {
+    width: 310px;
+    background-color: #dde7fcd5;
+    position: absolute;
+    left: 100px;
+    z-index: 1019;
+    border-radius: 30px;
+    display: none;
+    animation: fadeIn 0.6s;
+    top: 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+  }
+  
+  .list_detection ul {
+    margin: 0;
+    padding: 10px 0;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+  }
+  
+  .list_detection ul li {
+    width: 95%;
+    border-radius: 30px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    margin-bottom: 2px;
+    text-align: center;
+  }
+  
+  .list_detection ul li:hover {
+    background-color: #0000003d;
+  }
+  
+  .dropdown-item1 {
+    display: block;
+    padding: 10px 0;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 30px;
+    color: #EE4037 !important;
+    background: transparent;
+    border: 0;
+    width: 100%;
+    transition: color 0.2s, background 0.2s;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .dropdown-item1:hover, 
+  .dropdown-item1:focus, 
+  .dropdown-item1:active {
+    color: #fff !important;
+    background: #6b6b6baf !important;
+  }
+  
+  .list_Service_container {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  /*--- Account/Profile Icon ---*/
+  #dropdownUser3 {
+    cursor: pointer;
+    color: #EE4037;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 8px;
+    transition: background 0.2s, color 0.2s;
+  }
+  #dropdownUser3:hover,
+  #dropdownUser3:focus {
+    color: #fff;
+    background-color: #EE4037;
+  }
+  
+  .map {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /*--- Animation for menu appearance ---*/
+  @keyframes fadeIn {
+    from { opacity: 0; left: 60px; }
+    to   { opacity: 1; left: 100px; }
+  }
+  
+  /*--- General responsive tip (for mobile) ---*/
+  @media (max-width: 600px) {
+    .Side_bar {
+      width: 60px;
+      left: 3px;
+    }
+    .list_detection {
+      left: 60px;
+      width: 80vw;
+    }
+  }
+  .list_detection2 {
+    width: auto;
+    background-color: #dde7fcd5;
+    position: absolute;
+    left: 415px;
+    z-index: 1019;
+    border-radius: 30px;
+    display: none;
+    animation: fadeIn2 0.6s;
+    min-width: 220px;
+  }
+  .list_detection2 ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    border-radius: 30px;
+  }
+  .list_detection2 ul li {
+    width: 95%;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-bottom: 2px;
+  }
+  .list_detection2 ul li:hover {
+    background-color: #0000003d;
+  }
+  .dropdown-item1 {
+    cursor: pointer;
+  }
+  
