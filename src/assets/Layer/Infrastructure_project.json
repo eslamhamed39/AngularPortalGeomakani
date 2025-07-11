@@ -1,0 +1,24 @@
+{
+    "id": "Infrastructure_project",
+    "type": "fill",
+    "source": {
+        "type": "geojson",
+        "data": {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [ 3.921800136392701, 8.11509544010991 ], [ 3.922676726528434, 8.113344033083795 ], [ 3.903280177525029, 8.102709199581398 ], [ 3.902196393357212, 8.104618441141064 ], [ 3.921800136392701, 8.11509544010991 ]
+                    ]
+                ]
+            }
+        }
+    },
+    "layout": {},
+    "paint": {
+        "fill-color": "#216bc0",
+        "fill-opacity": 0.4,
+        "fill-outline-color": "white"
+    }
+}

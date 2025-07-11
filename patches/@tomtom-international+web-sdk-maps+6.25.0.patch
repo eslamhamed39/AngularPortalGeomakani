@@ -1,0 +1,33 @@
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/README.md b/node_modules/@tomtom-international/web-sdk-maps/README.md
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/dist/LICENSE.txt b/node_modules/@tomtom-international/web-sdk-maps/dist/LICENSE.txt
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/dist/index.d.ts b/node_modules/@tomtom-international/web-sdk-maps/dist/index.d.ts
+old mode 100644
+new mode 100755
+index b9faf6b..7f9fe9b
+--- a/node_modules/@tomtom-international/web-sdk-maps/dist/index.d.ts
++++ b/node_modules/@tomtom-international/web-sdk-maps/dist/index.d.ts
+@@ -1,4 +1,4 @@
+-import GeoJSON from 'geojson';
++import * as GeoJSON from 'geojson';
+ import {
+     BackgroundLayout,
+     BackgroundPaint,
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/dist/maps-web.min.js b/node_modules/@tomtom-international/web-sdk-maps/dist/maps-web.min.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/dist/maps-web.min.js.map b/node_modules/@tomtom-international/web-sdk-maps/dist/maps-web.min.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/dist/maps.css b/node_modules/@tomtom-international/web-sdk-maps/dist/maps.css
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/dist/maps.min.js b/node_modules/@tomtom-international/web-sdk-maps/dist/maps.min.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@tomtom-international/web-sdk-maps/dist/maps.min.js.map b/node_modules/@tomtom-international/web-sdk-maps/dist/maps.min.js.map
+old mode 100644
+new mode 100755

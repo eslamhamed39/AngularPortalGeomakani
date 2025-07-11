@@ -1,0 +1,84 @@
+.loading {
+  background-color: #000000c5;
+  width: 100%;
+  height: 100vh;
+  opacity: 1;
+  display: block;
+  z-index: 99999;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.loading_hidden {
+  animation: hide 1.5s ease-in-out forwards 1.5s;
+}
+
+#V_logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: fill 1.5s ease-in-out forwards 1.5s;
+}
+
+#V_logo path:nth-child(1) {
+  stroke-dasharray: 634.643;
+  stroke-dashoffset: 634.643;
+  animation: line-anim 1s ease forwards 0.3s;
+}
+#V_logo path:nth-child(2) {
+  stroke-dasharray: 659.999;
+  stroke-dashoffset: 659.999;
+  animation: line-anim 1s ease forwards 0.6s;
+}
+#V_logo path:nth-child(3) {
+  stroke-dasharray: 747.408;
+  stroke-dashoffset: 747.408;
+  animation: line-anim 1s ease forwards 0.8s;
+}
+#V_logo path:nth-child(4) {
+  stroke-dasharray: 496;
+  stroke-dashoffset: 496;
+  animation: line-anim 1s ease forwards 1s;
+}
+#V_logo path:nth-child(5) {
+  stroke-dasharray: 659.999;
+  stroke-dashoffset: 659.999;
+  animation: line-anim 1s ease forwards 1.25s;
+}
+#V_logo path:nth-child(6) {
+  stroke-dasharray: 695.288;
+  stroke-dashoffset: 695.288;
+  animation: line-anim 1s ease forwards 1.5s;
+}
+
+@keyframes line-anim {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fill {
+  from {
+    fill: transparent;
+  }
+  to {
+    fill: white;
+  }
+}
+
+@keyframes hide {
+  from {
+    opacity: 1;
+    display: block;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+
+
+
+

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geomakani</title>
+  <link rel="icon" type="image/x-icon" href="https://i.ibb.co/4gfgxPG9/Geomakani-logo-only.webp" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+  <!--Stylesheet-->
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="media.css" />
+  <script onload="mapContent();" src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.5.0/maps/maps-web.min.js"
+    defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.2/maps/maps-web.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+</head>
+
+<body>
+  <!-- &--------------------------------------Home Section--------------------------------------- -->
+
+  <div class=" w-100 vh-100 d-block" id="Home_section">
+    <div class="home_content">
+      <!-- ^----------------------------------- Sidebar ---------------------------------------------- -->
+      <div class="bg-light sticky-top Side_bar">
+        <img src="https://i.ibb.co/hxYrJLkJ/bitmap.webp" class="Side_v_logo" alt="v-Logo">
+        <!-- <img src="https://i.ibb.co/tZXHjwQ/Asset-1.png" class="v_logo" alt="v-Logo" /> -->
+
+        <div class="d-flex flex-column flex-row flex-nowrap bg-light2 align-items-center white_bg">
+          <ul
+            class=" d-flex nav nav-pills nav-flush flex-column flex-row align-items-center flex-nowrap mb-auto mx-auto text-center align-items-center ul_icon_sidebar">
+            <li class="li1">
+              <a href="#" class="nav-link nav-item py-3 px-2 active " title="" data-bs-toggle="tooltip"
+                data-bs-placement="right" data-bs-original-title="Home" id="Home">
+                <i class="bi bi-house fs-3"></i>
+              </a>
+            </li>
+            <li class="li2" onclick="toggleDiv()">
+              <a href="#" class="nav-link nav-item py-3 px-2 detection_icon" title="" data-bs-toggle="tooltip"
+                data-bs-placement="right" data-bs-original-title="Home" id="detect">
+                <div id="icon_land"></div>
+              </a>
+            </li>
+            <li class="li3">
+              <a href="#" class="nav-link nav-item py-3 px-2" title="" data-bs-toggle="tooltip"
+                data-bs-placement="right" data-bs-original-title="Dashboard">
+                <i class="bi-speedometer2 fs-3"></i>
+              </a>
+            </li>
+          </ul>
+          <a href="#" class="py-2 px-2 mb-2 nav-link nav-item" id="dropdownUser3" onclick="toggleDiv3()">
+            <i class="bi-person-circle h2"></i>
+          </a>
+          <div class="list_detection1 li6" id="profile_list">
+            <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+              <li><a class="dropdown-item" href="#">New project...</a></li>
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li class="dropdown-item Log_out1">
+                <!-- <a class="dropdown-item Log_out" href="/index.html">Log Out</a> -->
+                <a class="dropdown-item Log_out" href="/index.html">Log Out</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="list_detection">
+          <div class="list_Service_container">
+            <ul class="d-flex flex-column align-items-center justify-content-center shadow" id="Detection_services">
+              <li class="Montoring_project">
+                <a class="dropdown-item1 monitoring" id="Montoring_project" href="#">Monitoring Projects</a>
+              </li>
+              <li class="Land_Management"><a class="dropdown-item1" href="#" id="Land_Management">Land Management</a>
+              </li>
+              <li class="Forestry"><a class="dropdown-item1" href="#" id="Forestry">Forestry</a></li>
+              <li class="Agriculture"><a class="dropdown-item1" href="#" id="Agriculture">Agriculture</a></li>
+              <li class="Mineral_Resources"><a class="dropdown-item1" href="#" id="Mineral_Resources">Mineral Resources
+                  Management</a></li>
+              <li class="Water_Resources"><a class="dropdown-item1" href="#" id="Water_Resources">Water Resources
+                  Management</a></li>
+              <li class="National_Security_Defense"><a class="dropdown-item1" href="#"
+                  id="National_Security_Defense">National Security & Defense</a></li>
+              <li class="palm_tree"><a class="dropdown-item1" href="#" id="palm_tree">Tree & Palm Tree</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="list_detection2" id="Land_Management_Menu">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li><a class="dropdown-item1" href="#" id="Land_Use">Land Use</a></li>
+            <li><a class="dropdown-item1" href="#" id="land_cover">Land Cover</a></li>
+            <li>
+              <a class="dropdown-item1" href="#" id="Squatters_Camps">Buildings Detection South-Africa</a>
+            </li>
+            <li>
+              <a class="dropdown-item1" href="#" id="Cahnge_Detection_Cairo">Change Detection Cairo (Egypt)</a>
+            </li>
+          </ul>
+        </div>
+        <div class="list_detection2" id="Montoring_project_Menu">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li>
+              <a class="dropdown-item1" href="#" id="Project">Tanzania Mega Mall
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item1" href="#" id="Azuri_Towers_Nigeria">Azuri Towers Nigeria</a>
+            </li>
+            <li>
+              <a class="dropdown-item1" href="#" id="TATU_CITY_KENYA">Tatu City Kenya</a>
+            </li>
+            <li>
+              <a class="dropdown-item1" href="#" id="Infrastructure_project">Infrastructure project</a>
+            </li>
+            <li>
+              <a class="dropdown-item1" href="#" id="Ain_Sokhna_Port">Ain Sokhna Port</a>
+            </li>
+          </ul>
+        </div>
+        <div class="list_detection2" id="Forestry_Menu">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li>
+              <a class="dropdown-item1" id="Forest_Logging_Detection" href="#">Forest Logging Detection</a>
+            </li>
+            <li>
+              <a class="dropdown-item1" href="#" id="Wildfires">Wildfires Detection</a>
+            </li>
+            <li>
+              <a class="dropdown-item1" href="#" id="Detect_rice_straw_burning">Detect Rice Straw Burning</a>
+            </li>
+          </ul>
+        </div>
+        <div class="list_detection2" id="Mineral_Resources_Menu">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li>
+              <a class="dropdown-item1" href="#" id="Oil_Spill_Detection">Oil Spill Detection</a>
+            </li>
+            <li><a class="dropdown-item1" href="#" id="Mining_Monitoring">Mining Monitoring</a>
+            </li>
+          </ul>
+        </div>
+        <div class="list_detection2" id="Water_Resources_Menu">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li>
+              <a class="dropdown-item1" href="#" id="Renaissance_Dam">Renaissance Dam</a>
+            </li>
+            <li><a class="dropdown-item1" href="#" id="Libya_Flooding">Libya Flooding</a></li>
+          </ul>
+        </div>
+        <div class="list_detection2" id="National_Security_Defense_Menu">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li>
+              <a class="dropdown-item1" href="#" id="khartoum_airport">Khartoum Airport</a>
+            </li>
+            <li><a class="dropdown-item1" href="#" id="Sudan_Border">Crisis in Sudan Border</a></li>
+          </ul>
+        </div>
+        <div class="list_detection2" id="Palm_Tree_Menu">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li>
+              <a class="dropdown-item1" href="#" id="1">فيحان الحربي</a>
+            </li>
+            <li><a class="dropdown-item1" href="#" id="2">عبدالعزيز الخليفة</a></li>
+            <li><a class="dropdown-item1" href="#" id="3">عويد عطالله عواض المطيري</a></li>
+            <li><a class="dropdown-item1" href="#" id="4">مدوخ بن هلال بن منير المطيري</a></li>
+            <li><a class="dropdown-item1" href="#" id="5">ثامر خلف مشيعان العضيلة</a></li>
+            <li><a class="dropdown-item1" href="#" id="6">ملحق بن عاقل عواض المطيري</a></li>
+            <li><a class="dropdown-item1" href="#" id="7">تراحيب فيحان مصلح العضيلة</a></li>
+            <li><a class="dropdown-item1" href="#" id="8">منصور محمد بندر الحربي</a></li>
+            <li><a class="dropdown-item1" href="#" id="9">منزل نافل الخمشي</a></li>
+            <li><a class="dropdown-item1" href="#" id="10">بندر الشملان</a></li>
+          </ul>
+        </div>
+        <div class="list_detection2" id="Agriculture_Menu">
+          <div class="internal_list">
+            <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+              <li>
+                <a class="dropdown-item1" href="#" id="Crop_Disease_Detection">Crop Disease Detection</a>
+              </li>
+              <li><a class="dropdown-item1" href="#" id="Crop_Health">Crop Health</a></li>
+              <li>
+                <a class="dropdown-item1" href="#" id="Crop_Classification">Crop Classification Kenya</a>
+              </li>
+              <li>
+                <a class="dropdown-item1" href="#" id="Dumyat">Crop Classification Damietta(Egypt)</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="list_detection2">
+          </div> -->
+    </div>
+    <!-- ^----------------------------------- End Sidebar ------------------------------------------- -->
+
+    <!-- *----------------------------------- Map ---------------------------------------------- -->
+    <div class="d-block justify-content-center align-items-center map vw-100 vh-100 overflow-hidden" id="map_section">
+      <div class="d-flex" id="map"></div>
+    </div>
+    <!-- *---------------------------------- End Map ------------------------------------------- -->
+  </div>
+  </div>
+
+  <div id="dialog_detect" class="dialog_detect row">
+    <div class="container_data_dialog" id="container_data_dialog">
+      <div class="container_dashbord col-md-7 col-sm-7">
+        <div id="page">
+          <div class="news_image">
+            <a id="url_news" target="blank"
+              href="https://www.thecitizen.co.tz/tanzania/news/national/mwanza-gets-ready-for-mega-mall-2533096">
+              <img src="../Geo File/Polygon Create/Screenshot.png" alt="" id="news" /></a>
+          </div>
+          <div class="wrapper">
+            <!-- &------------ Select Date ------------------ -->
+
+            <div class="select-menu" id="left_selector">
+              <div class="select-btn">
+                <span class="sBtn-text">Date</span>
+                <i class="bx bx-chevron-down"></i>
+              </div>
+              <div class="list_date_container">
+                <div class="ul_container2">
+                  <ul class="options" id="image_date_left">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="select-menu1" id="right_selector">
+              <div class="select-btn1">
+                <span class="sBtn-text1">Date</span>
+                <i class="bx bx-chevron-down"></i>
+              </div>
+              <div class="list_date_container">
+                <div class="ul_container2">
+                  <ul class="options1" id="image_date_right">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- &------------End Select Date ------------------ -->
+
+            <div class="before">
+              <img class="content-image" id="img_left" src="../Geo File/Polygon Create/2-2022.jpg" draggable="false" />
+            </div>
+            <div class="after">
+              <img class="content-image" id="img_right" src="../Geo File/Polygon Create/6-2023.jpg" draggable="false" />
+            </div>
+            <div class="scroller">
+              <svg class="scroller__thumb" xmlns="http://www.w3.org/2000/svg" width="100" height="100"
+                viewBox="0 0 100 100">
+                <polygon points="0 50 37 68 37 32 0 50" style="fill: #fff" />
+                <polygon points="100 50 64 32 64 68 100 50" style="fill: #fff" />
+              </svg>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="container_dash col-md-5 col-sm-5">
+        <div class="dashbord d-flex flex-column">
+          <div class="timeline">
+            <img id="dashbord_img1" src="Dashbord/3.png" alt="">
+          </div>
+          <div class="container_row2">
+            <div class="piechart col-md-7">
+              <img id="dashbord_img2" src="Dashbord/4.png" alt="">
+            </div>
+            <div class="parchart col-md-5">
+              <img id="dashbord_img3" src="Dashbord/6.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="video_container" id="video_container">
+      <!-- <video width="100%" height="100%"  muted controls id="video_element" class="custom-video__video"> 
+          <source src="videos/Crop_classification_Dumyat.mp4" type="video/mp4">
+        </video> -->
+      <!-- <video class="custom-video__video" width="100%" height="100%" muted  id="video_element">
+          <source src="videos/Crop_classification_Dumyat.mp4" type="video/mp4" />
+        </video>-->
+      <video id="video_element" class="custom-video__video" width="100%" height="100%" controls muted autoplay>
+        <source id="video_image" src="videos/Crop_classification_Dumyat.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <!-- <div id="custom-video__control">►</div>  -->
+
+
+    </div>
+
+  </div>
+
+
+  </div>
+  <div class="watermark">
+    <img src="https://i.ibb.co/Q37PwqPT/White-Geomakani-logo-only.webp" alt="" />
+  </div>
+  <div class="loading">
+    <!-- <svg id="V_logo" width="35%" height="15%" viewBox="0 0 726 152" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M142.648 8.05469L144.17 3.99999H139.839H115.839H113.727L113.015 5.98851L74.4459 113.683L36.0649 5.99284L35.3547 3.99999H33.2391H8.83905H4.50202L6.03189 8.05823L58.4319 147.058L59.1639 149H61.2391H87.6391H89.717L90.4475 147.055L142.648 8.05469Z"
+          stroke="white" stroke-width="6" />
+        <path
+          d="M232.706 66.2V63.2H229.706H184.706V28.4H235.706H238.706V25.4V6.8V3.8H235.706H158.906H155.906V6.8V146V149H158.906H235.706H238.706V146V127.4V124.4H235.706H184.706V87.8H229.706H232.706V84.8V66.2Z"
+          stroke="white" stroke-width="6" />
+        <path
+          d="M333.389 147.496L334.254 149H335.989H363.189H368.475L365.765 144.462L333.381 90.2384C342.946 87.2477 350.382 82.2608 355.434 75.1391C361.123 67.1714 363.989 58.2981 363.989 48.6C363.989 40.3683 361.997 32.8392 357.979 26.0852C354.043 19.2438 348.038 13.8724 340.14 9.92157C332.281 5.92295 322.789 3.99999 311.789 3.99999H263.789H260.789V6.99999V146V149H263.789H286.589H289.589V146V93.4H302.254L333.389 147.496ZM328.901 63.6463L328.884 63.6624L328.868 63.6787C325.362 67.1843 319.86 69.2 311.789 69.2H289.589V28.6H311.789C320.032 28.6 325.606 30.5687 329.102 33.9547L329.119 33.9718L329.137 33.9886C332.664 37.2947 334.589 42.0237 334.589 48.6C334.589 55.1419 332.616 60.0433 328.901 63.6463Z"
+          stroke="white" stroke-width="6" />
+        <path
+          d="M482.956 6.99999V3.99999H479.956H382.956H379.956V6.99999V25.6V28.6H382.956H417.156V146V149H420.156H442.956H445.956V146V28.6H479.956H482.956V25.6V6.99999Z"
+          stroke="white" stroke-width="6" />
+        <path
+          d="M576.847 66.2V63.2H573.847H528.847V28.4H579.847H582.847V25.4V6.8V3.8H579.847H503.047H500.047V6.8V146V149H503.047H579.847H582.847V146V127.4V124.4H579.847H528.847V87.8H573.847H576.847V84.8V66.2Z"
+          stroke="white" stroke-width="6" />
+        <path
+          d="M658.014 101.409L686.783 147.586L687.664 149H689.33H714.93H720.331L717.477 144.415L675.264 76.6014L717.675 8.58736L720.536 3.99999H715.13H689.73H688.006L687.138 5.48965L660.046 51.9852L631.077 5.41541L630.197 3.99999H628.53H602.93H597.524L600.384 8.58736L642.795 76.6014L600.583 144.415L597.729 149H603.13H628.53H630.253L631.121 147.512L658.014 101.409Z"
+          stroke="white" stroke-width="6" />
+      </svg> -->
+    <svg id="V_logo" width="591" height="135" viewBox="0 0 591 135" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clip-path="url(#clip0_2_2)">
+        <mask id="mask0_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask0_2_2)">
+          <path
+            d="M94.7692 106.055L133.623 67.2061L94.7692 28.3528L86.2559 36.8647L116.6 67.2061L86.2559 97.5421L94.7692 106.055Z"
+            stroke="white" stroke-width="1.33333" />
+        </g>
+        <mask id="mask1_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask1_2_2)">
+          <path
+            d="M71.3042 111.167L66.8122 115.66L17.9655 66.8134L66.8149 17.9641L71.3042 22.4547L79.8149 13.9427L66.8149 0.942747L0.942871 66.8134L66.8149 132.683L79.8149 119.681L71.3042 111.167Z"
+            stroke="white" stroke-width="1.33333" />
+        </g>
+        <path
+          d="M114.686 35.7549L146.182 67.2535L114.686 98.7496L123.195 107.262L163.202 67.2535L123.195 27.2429L114.686 35.7549Z"
+          stroke="white" stroke-width="1.33333" />
+        <path
+          d="M31.4631 67.2535L97.3338 133.123L109.178 121.274L100.667 112.767L97.3338 116.099L48.4858 67.2535L97.3338 18.4056L100.667 21.7402L109.178 13.2242L97.3338 1.38153L31.4631 67.2535Z"
+          stroke="white" stroke-width="1.33333" />
+        <path
+          d="M114.686 35.7549L146.182 67.2535L114.686 98.7496L123.195 107.262L163.202 67.2535L123.195 27.2429L114.686 35.7549Z"
+          stroke="white" stroke-width="1.33333" />
+        <path
+          d="M31.4631 67.2535L97.3338 133.123L109.178 121.274L100.667 112.767L97.3338 116.099L48.4858 67.2535L97.3338 18.4056L100.667 21.7402L109.178 13.2242L97.3338 1.38153L31.4631 67.2535Z"
+          stroke="white" stroke-width="1.33333" />
+        <mask id="mask2_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask2_2_2)">
+          <path
+            d="M126.53 116.1L77.681 67.253L126.53 18.4037L175.377 67.253L126.53 116.1ZM126.53 1.38238L60.657 67.253L126.53 133.122L192.4 67.253L126.53 1.38238Z"
+            stroke="white" stroke-width="1.33333" />
+        </g>
+        <mask id="mask3_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask3_2_2)">
+          <path
+            d="M284.034 37.6509H280.232C280.466 35.4442 280.584 33.4962 280.584 31.8056C280.584 25.4682 278.952 20.8442 275.689 17.9336C272.425 15.0229 268.401 13.5669 263.612 13.5669C256.992 13.5669 250.349 15.8069 243.682 20.2869C237.016 24.7656 231.557 31.0162 227.309 39.0362C223.06 47.0576 220.936 55.4309 220.936 64.1536C220.936 73.0176 223.037 79.5376 227.238 83.7122C231.44 87.8869 236.146 89.9749 241.358 89.9749C244.457 89.9749 247.425 89.5642 250.266 88.7416C253.106 87.9216 255.818 86.7122 258.401 85.1149C260.56 77.7456 261.64 72.8389 261.64 70.3976C261.64 69.2242 261.205 68.2962 260.337 67.6162C259.468 66.9349 257.93 66.5936 255.725 66.5936C254.973 66.5936 253.165 66.7122 250.302 66.9469L250.936 63.4962C253.001 63.1202 255.09 62.9322 257.204 62.9322C258.894 62.9322 260.982 62.9802 263.47 63.0736C265.396 63.1202 266.826 63.1442 267.766 63.1442C269.457 63.1442 272.038 63.0029 275.513 62.7216C277.345 62.5802 278.917 62.4869 280.232 62.4389L279.457 66.0309C277.082 65.9842 275.397 66.4882 274.401 67.5456C273.404 68.6016 272.36 71.3602 271.268 75.8189C267.404 91.8296 263.6 103.414 259.852 110.574C256.104 117.731 251.841 122.872 247.064 125.995C242.286 129.116 237.133 130.678 231.605 130.678C226.921 130.678 223.138 129.61 220.257 127.474C217.376 125.338 215.936 123.096 215.936 120.748C215.936 119.482 216.394 118.4 217.309 117.51C218.225 116.616 219.269 116.171 220.442 116.171C222.038 116.171 223.846 117.299 225.866 119.551C228.165 122.087 229.961 123.73 231.253 124.482C232.544 125.231 233.917 125.608 235.373 125.608C238.33 125.608 240.936 124.458 243.189 122.156C247.79 117.603 252.32 107.063 256.781 90.5376C253.682 92.2282 250.537 93.5082 247.345 94.3762C244.15 95.2442 240.888 95.6789 237.556 95.6789C229.292 95.6789 222.79 93.4976 218.049 89.1349C211.71 83.3189 208.541 75.2029 208.541 64.7882C208.541 55.3122 210.948 46.4002 215.76 38.0496C220.572 29.7002 227.262 22.8282 235.83 17.4336C244.397 12.0389 252.53 9.34156 260.232 9.34156C264.41 9.34156 269.316 9.9989 274.949 11.3136C280.63 12.5802 284.95 13.2389 287.908 13.2842C285.325 22.2056 284.034 30.3269 284.034 37.6509Z"
+            stroke="white" stroke-width="1.33333" />
+        </g>
+        <mask id="mask4_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask4_2_2)">
+          <path
+            d="M289.849 82.1233C294.671 79.9673 298.293 77.6473 300.719 75.1619C302.365 73.4259 303.189 71.7033 303.189 69.9966C303.189 68.7086 302.852 67.6833 302.179 66.9193C301.504 66.1553 300.628 65.7739 299.551 65.7739C298.443 65.7739 297.365 66.1939 296.317 67.0313C294.909 68.1393 293.727 69.8166 292.768 72.0619C291.391 75.3566 290.417 78.7099 289.849 82.1233ZM305.569 88.6366L307.052 90.6126C299.715 97.5899 293.427 101.078 288.187 101.078C286.06 101.078 284.436 100.359 283.313 98.9219C282.191 97.4846 281.629 95.1793 281.629 92.0046C281.629 85.5979 283.575 79.2193 287.468 72.8713C291.84 65.6553 297.065 62.0459 303.144 62.0459C305.269 62.0459 306.895 62.5779 308.017 63.6406C309.141 64.7033 309.701 66.1633 309.701 68.0193C309.701 69.9673 309.028 71.8819 307.681 73.7686C306.333 75.6553 303.923 77.6166 300.449 79.6526C298.712 80.6406 294.999 82.4233 289.309 84.9979C289.04 86.6153 288.907 88.1579 288.907 89.6246C288.907 91.7513 289.243 93.2326 289.916 94.0713C290.589 94.9099 291.571 95.3286 292.859 95.3286C294.087 95.3286 295.433 94.9846 296.901 94.2953C298.877 93.3673 301.767 91.4819 305.569 88.6366Z"
+            stroke="white" stroke-width="1.33333" />
+        </g>
+        <mask id="mask5_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask5_2_2)">
+          <path
+            d="M289.849 82.1233C294.671 79.9673 298.293 77.6473 300.719 75.1619C302.365 73.4259 303.189 71.7033 303.189 69.9966C303.189 68.7086 302.852 67.6833 302.179 66.9193C301.504 66.1553 300.628 65.7739 299.551 65.7739C298.443 65.7739 297.365 66.1939 296.317 67.0313C294.909 68.1393 293.727 69.8166 292.768 72.0619C291.391 75.3566 290.417 78.7099 289.849 82.1233ZM305.569 88.6366L307.052 90.6126C299.715 97.5899 293.427 101.078 288.187 101.078C286.06 101.078 284.436 100.359 283.313 98.9219C282.191 97.4846 281.629 95.1793 281.629 92.0046C281.629 85.5979 283.575 79.2193 287.468 72.8713C291.84 65.6553 297.065 62.0459 303.144 62.0459C305.269 62.0459 306.895 62.5779 308.017 63.6406C309.141 64.7033 309.701 66.1633 309.701 68.0193C309.701 69.9673 309.028 71.8819 307.681 73.7686C306.333 75.6553 303.923 77.6166 300.449 79.6526C298.712 80.6406 294.999 82.4233 289.309 84.9979C289.04 86.6153 288.907 88.1579 288.907 89.6246C288.907 91.7513 289.243 93.2326 289.916 94.0713C290.589 94.9099 291.571 95.3286 292.859 95.3286C294.087 95.3286 295.433 94.9846 296.901 94.2953C298.877 93.3673 301.767 91.4819 305.569 88.6366Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+        <mask id="mask6_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask6_2_2)">
+          <path
+            d="M331.755 65.5042C329.21 65.5042 326.747 67.3229 324.366 70.9616C321.986 74.6002 320.795 79.6229 320.795 86.0309C320.795 89.9242 321.529 92.9936 322.997 95.2389C324.075 96.8856 325.513 97.7096 327.309 97.7096C329.823 97.7096 332.114 96.1522 334.181 93.0376C336.815 88.9962 338.134 83.9802 338.134 77.9909C338.134 73.4989 337.527 70.2949 336.314 68.3789C335.102 66.4629 333.582 65.5042 331.755 65.5042ZM335.573 62.1349C338.507 62.1349 340.947 63.3029 342.894 65.6389C344.841 67.9749 345.814 71.2242 345.814 75.3856C345.814 82.0336 343.478 88.0002 338.807 93.2856C334.137 98.5709 329.195 101.212 323.985 101.212C320.781 101.212 318.198 100.164 316.237 98.0682C314.275 95.9736 313.295 93.1136 313.295 89.4896C313.295 83.2016 315.091 77.3922 318.685 72.0616C323.206 65.4442 328.835 62.1349 335.573 62.1349Z"
+            stroke="white" stroke-width="1.33333" />
+        </g>
+        <mask id="mask7_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask7_2_2)">
+          <path
+            d="M331.755 65.5042C329.21 65.5042 326.747 67.3229 324.366 70.9616C321.986 74.6002 320.795 79.6229 320.795 86.0309C320.795 89.9242 321.529 92.9936 322.997 95.2389C324.075 96.8856 325.513 97.7096 327.309 97.7096C329.823 97.7096 332.114 96.1522 334.181 93.0376C336.815 88.9962 338.134 83.9802 338.134 77.9909C338.134 73.4989 337.527 70.2949 336.314 68.3789C335.102 66.4629 333.582 65.5042 331.755 65.5042ZM335.573 62.1349C338.507 62.1349 340.947 63.3029 342.894 65.6389C344.841 67.9749 345.814 71.2242 345.814 75.3856C345.814 82.0336 343.478 88.0002 338.807 93.2856C334.137 98.5709 329.195 101.212 323.985 101.212C320.781 101.212 318.198 100.164 316.237 98.0682C314.275 95.9736 313.295 93.1136 313.295 89.4896C313.295 83.2016 315.091 77.3922 318.685 72.0616C323.206 65.4442 328.835 62.1349 335.573 62.1349Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+        <mask id="mask8_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.52V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask8_2_2)">
+          <path
+            d="M351.293 72.4665L349.945 70.6692C352.911 67.7052 355.727 65.5198 358.399 64.1118C361.069 62.7052 363.173 62.0012 364.708 62.0012C365.34 62.0012 365.815 62.1358 366.129 62.4052C366.443 62.6745 366.601 63.0492 366.601 63.5278C366.601 64.1278 366.361 65.2798 365.883 66.9865C365.193 69.5025 364.713 71.4932 364.444 72.9612C371.611 65.6545 377.091 62.0012 380.884 62.0012C381.869 62.0012 382.616 62.2705 383.124 62.8092C383.632 63.3478 383.885 64.2025 383.885 65.3692C383.885 66.6278 383.437 68.7678 382.541 71.7932C385.957 68.2292 388.923 65.7065 391.44 64.2238C393.959 62.7425 395.92 62.0012 397.329 62.0012C398.588 62.0012 399.563 62.3598 400.251 63.0785C400.941 63.7972 401.285 64.9052 401.285 66.4025C401.285 67.3012 401.135 68.3638 400.836 69.5918C400.536 70.8198 399.443 74.5625 397.557 80.8212C395.191 88.5772 394.009 93.2025 394.009 94.6998C394.009 95.7185 394.427 96.2265 395.267 96.2265C395.835 96.2265 396.389 96.0478 396.928 95.6878C398.695 94.4305 400.507 92.8732 402.363 91.0172L403.845 92.6332C403.217 93.1425 402.033 94.1905 400.297 95.7785C397.9 97.9345 396.255 99.2812 395.356 99.8198C393.62 100.839 392.151 101.348 390.953 101.348C390.056 101.348 389.261 100.905 388.573 100.023C387.885 99.1398 387.54 97.9198 387.54 96.3612C387.54 94.9252 387.749 93.2398 388.169 91.3092C388.588 89.3772 389.816 85.0425 391.853 78.3052C393.38 73.2452 394.144 70.1758 394.144 69.0972C394.144 68.0798 393.693 67.5705 392.796 67.5705C392.047 67.5705 391.044 67.9452 389.787 68.6932C387.211 70.2505 385.055 72.1518 383.319 74.3985C382.121 75.9545 381.073 78.4252 380.175 81.8092C378.168 89.2052 376.671 95.2385 375.683 99.9105H369.304L375.997 72.4665C376.476 70.4905 376.716 69.3518 376.716 69.0532C376.716 68.5745 376.596 68.2065 376.357 67.9518C376.119 67.6985 375.773 67.5705 375.325 67.5705C374.519 67.5705 373.263 68.1998 371.559 69.4572C368.599 71.5838 366.469 73.6412 365.168 75.6332C363.868 77.6252 362.756 80.6558 361.829 84.7278L358.376 99.9105H351.923L356.997 78.4852C358.495 72.2865 359.244 68.9185 359.244 68.3785C359.244 67.6905 358.973 67.3465 358.435 67.3465C357.267 67.3465 354.887 69.0532 351.293 72.4665Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+        <mask id="mask9_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask9_2_2)">
+          <path
+            d="M432.187 68.2442C430.57 67.9149 429.207 67.7496 428.099 67.7496C425.405 67.7496 423.054 68.4909 421.049 69.9736C419.042 71.4562 417.178 74.1216 415.455 77.9682C413.733 81.8162 412.873 85.6562 412.873 89.4896C412.873 91.5256 413.218 92.9936 413.906 93.8909C414.594 94.7896 415.493 95.2389 416.602 95.2389C418.667 95.2389 420.883 94.1229 423.249 91.8922C425.614 89.6629 427.351 86.4509 428.459 82.2576L432.187 68.2442ZM437.757 61.3722L440.721 60.7429L437.351 72.1069C436.005 76.6282 434.733 81.8389 433.535 87.7376C432.875 90.9416 432.546 93.0082 432.546 93.9362C432.546 94.8642 432.921 95.3282 433.669 95.3282C434.149 95.3282 434.911 95.0136 435.959 94.3856C437.817 93.2776 439.598 91.9002 441.305 90.2536L442.743 92.0042C439.329 95.1189 437.142 97.0056 436.185 97.6642C434.269 98.9816 432.442 99.9549 430.706 100.584C429.567 101.003 428.459 101.212 427.382 101.212C426.602 101.212 426.018 101.032 425.63 100.674C425.239 100.315 425.046 99.7909 425.046 99.1016C425.046 98.6522 425.165 98.0389 425.405 97.2602L427.202 91.1509C424.626 94.2362 421.557 96.8856 417.994 99.1016C415.807 100.479 413.802 101.168 411.975 101.168C410.238 101.168 408.905 100.554 407.978 99.3256C406.719 97.6802 406.091 95.5229 406.091 92.8576C406.091 89.6842 406.937 86.1509 408.629 82.2576C410.319 78.3656 412.589 74.8322 415.434 71.6576C418.278 68.4842 421.273 66.1482 424.417 64.6509C426.842 63.5136 429.955 62.9442 433.759 62.9442C434.718 62.9442 435.691 63.0042 436.678 63.1242L437.757 61.3722Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+        <mask id="mask10_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask10_2_2)">
+          <path
+            d="M457.509 78.6201C461.532 78.6494 464.789 78.2601 467.277 77.4521C469.766 76.6441 471.538 75.5654 472.597 74.2187C473.654 72.8707 474.184 71.4041 474.184 69.8161C474.184 68.6787 473.877 67.7654 473.264 67.0761C472.65 66.3881 471.91 66.0441 471.045 66.0441C468.234 66.0441 463.93 69.1774 458.13 75.4467L457.509 78.6201ZM452.713 99.9107H446.021L451.905 75.4307C454.75 63.2894 456.613 55.8107 457.497 52.9921C458.38 50.1747 459.444 47.8507 460.686 46.0227C461.929 44.1934 463.486 42.5587 465.358 41.1201C467.229 39.6827 469.25 38.5801 471.421 37.8147C473.592 37.0507 475.501 36.6681 477.148 36.6681C478.705 36.6681 479.865 36.9681 480.629 37.5667C481.393 38.1654 481.774 38.9587 481.774 39.9467C481.774 40.7854 481.43 41.5041 480.742 42.1027C480.054 42.7027 479.188 43.0014 478.14 43.0014C476.824 43.0014 474.834 42.7774 472.173 42.3281C471.305 42.1481 470.542 42.0574 469.884 42.0574C468.956 42.0574 468.081 42.3894 467.258 43.0494C466.436 43.7107 465.704 44.8894 465.06 46.5854C464.416 48.2827 463.512 51.8041 462.345 57.1494L459.118 71.4747C461.996 68.2121 464.977 65.6974 468.065 63.9321C470.402 62.6147 472.634 61.9561 474.762 61.9561C476.261 61.9561 477.528 62.5174 478.561 63.6401C479.596 64.7627 480.112 66.1787 480.112 67.8854C480.112 71.0894 478.45 73.9481 475.126 76.4641C471.804 78.9787 466.728 80.3267 459.901 80.5067C462.206 81.5267 464.048 82.6427 465.425 83.8574C466.802 85.0721 468.157 86.7507 469.489 88.8947C470.821 91.0387 472.537 94.6294 474.633 99.6654C477.118 105.661 479.424 109.651 481.55 111.629C483.645 113.608 485.952 114.597 488.468 114.597C489.933 114.597 491.146 114.276 492.105 113.632C493.064 112.988 493.542 112.336 493.542 111.677C493.542 111.259 493.392 110.691 493.093 109.972C492.764 109.193 492.598 108.533 492.598 107.996C492.598 107.307 492.869 106.693 493.408 106.153C493.946 105.613 494.576 105.345 495.294 105.345C496.132 105.345 496.85 105.681 497.45 106.355C498.049 107.029 498.348 107.92 498.348 109.029C498.348 111.184 497.361 113.1 495.384 114.779C493.408 116.455 490.832 117.293 487.658 117.293C484.394 117.293 481.474 116.468 478.9 114.819C476.324 113.171 473.914 110.532 471.668 106.905C470.381 104.807 468.134 100.025 464.93 92.5614C463.436 89.0241 462.09 86.3694 460.896 84.6014C459.969 83.2227 458.698 81.8574 457.084 80.5094L452.713 99.9107Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+        <mask id="mask11_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask11_2_2)">
+          <path
+            d="M511.285 68.2442C509.668 67.9149 508.305 67.7496 507.197 67.7496C504.503 67.7496 502.152 68.4909 500.147 69.9736C498.139 71.4562 496.276 74.1216 494.553 77.9682C492.831 81.8162 491.971 85.6562 491.971 89.4896C491.971 91.5256 492.316 92.9936 493.004 93.8909C493.692 94.7896 494.591 95.2389 495.699 95.2389C497.765 95.2389 499.981 94.1229 502.347 91.8922C504.712 89.6629 506.449 86.4509 507.557 82.2576L511.285 68.2442ZM516.855 61.3722L519.819 60.7429L516.449 72.1069C515.103 76.6282 513.831 81.8389 512.633 87.7376C511.973 90.9416 511.644 93.0082 511.644 93.9362C511.644 94.8642 512.019 95.3282 512.767 95.3282C513.247 95.3282 514.009 95.0136 515.057 94.3856C516.915 93.2776 518.696 91.9002 520.403 90.2536L521.84 92.0042C518.427 95.1189 516.24 97.0056 515.283 97.6642C513.367 98.9816 511.54 99.9549 509.804 100.584C508.665 101.003 507.557 101.212 506.48 101.212C505.7 101.212 505.116 101.032 504.728 100.674C504.337 100.315 504.144 99.7909 504.144 99.1016C504.144 98.6522 504.263 98.0389 504.503 97.2602L506.3 91.1509C503.724 94.2362 500.655 96.8856 497.092 99.1016C494.905 100.479 492.899 101.168 491.073 101.168C489.336 101.168 488.003 100.554 487.076 99.3256C485.817 97.6802 485.189 95.5229 485.189 92.8576C485.189 89.6842 486.035 86.1509 487.727 82.2576C489.417 78.3656 491.687 74.8322 494.532 71.6576C497.376 68.4842 500.371 66.1482 503.515 64.6509C505.94 63.5136 509.053 62.9442 512.857 62.9442C513.816 62.9442 514.789 63.0042 515.776 63.1242L516.855 61.3722Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+        <mask id="mask12_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask12_2_2)">
+          <path
+            d="M526.196 72.6907L524.67 71.1187C528.506 67.448 531.562 65.0107 533.84 63.8067C536.118 62.6027 538.066 62.0014 539.684 62.0014C540.312 62.0014 540.808 62.136 541.167 62.4054C541.527 62.6747 541.707 62.9894 541.707 63.348C541.707 63.6174 541.631 64.0974 541.482 64.7854L539.458 73.8254C542.506 70.4387 546.332 67.276 550.936 64.3387C553.387 62.8094 555.406 62.0454 556.99 62.0454C558.156 62.0454 559.068 62.42 559.724 63.1694C560.383 63.9174 560.712 64.9947 560.712 66.4027C560.712 67.3307 560.576 68.3787 560.308 69.5467C559.832 71.4934 558.578 75.7307 556.55 82.2587C554.64 88.3667 553.686 92.424 553.686 94.4307C553.686 95.044 553.775 95.504 553.955 95.812C554.135 96.1187 554.388 96.272 554.719 96.272C555.586 96.272 556.948 95.4334 558.806 93.756C560.123 92.5587 561.44 91.4507 562.759 90.4334L563.882 92.0494C561.127 95.0894 558.267 97.5334 555.303 99.38C553.416 100.572 551.859 101.168 550.631 101.168C549.492 101.168 548.61 100.756 547.982 99.932C547.352 99.1094 547.038 97.7694 547.038 95.912C547.038 93.248 548.699 86.6147 552.023 76.0147C553.042 72.2414 553.551 70.0414 553.551 69.412C553.551 68.484 552.996 68.02 551.89 68.02C550.691 68.02 549.148 68.6494 547.263 69.9094C544.447 71.768 542.098 73.9574 540.21 76.476C539.012 78.096 538.01 80.6734 537.202 84.212L533.563 99.9094H526.871C528.128 95.4134 529.222 91.1094 530.15 87.0014L534.147 69.9094C534.296 69.22 534.371 68.7254 534.371 68.4254C534.371 67.616 534.071 67.2107 533.472 67.2107C532.994 67.2107 532.304 67.528 531.407 68.1627C529.55 69.4 527.814 70.9094 526.196 72.6907Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+        <mask id="mask13_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask13_2_2)">
+          <path
+            d="M586.25 42.8214C587.178 42.8214 587.941 43.1294 588.541 43.7428C589.14 44.3561 589.44 45.1428 589.44 46.1001C589.44 47.4188 588.982 48.5788 588.069 49.5814C587.156 50.5854 586.13 51.0854 584.993 51.0854C584.094 51.0854 583.345 50.7721 582.746 50.1428C582.148 49.5148 581.849 48.6908 581.849 47.6721C581.849 46.3254 582.282 45.1801 583.152 44.2361C584.02 43.2934 585.052 42.8214 586.25 42.8214ZM568.598 72.5561L566.622 71.0294C569.612 67.7348 572.341 65.3921 574.809 64.0001C577.277 62.6068 579.377 61.9108 581.112 61.9108C582.069 61.9108 582.802 62.1201 583.31 62.5401C583.818 62.9601 584.073 63.5281 584.073 64.2468C584.073 65.1148 583.102 68.7988 581.161 75.2961C577.997 85.9268 576.413 92.3348 576.413 94.5201C576.413 94.9401 576.518 95.2908 576.728 95.5761C576.937 95.8601 577.161 96.0028 577.402 96.0028C578.36 96.0028 580.816 94.1454 584.769 90.4334L586.52 92.1401C582.417 96.0028 579.422 98.4721 577.536 99.5508C575.65 100.629 574.108 101.168 572.91 101.168C571.862 101.168 571.03 100.837 570.417 100.179C569.804 99.5214 569.497 98.6081 569.497 97.4401C569.497 93.6974 571.742 84.5481 576.234 69.9961C576.444 69.3081 576.548 68.6934 576.548 68.1548C576.548 67.5561 576.28 67.2561 575.74 67.2561C575.141 67.2561 574.46 67.4961 573.697 67.9748C572.933 68.4534 571.233 69.9814 568.598 72.5561Z"
+            stroke="white" stroke-width="1.33333" />
+        </g>
+        <mask id="mask14_2_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1815" y="-360" width="2561"
+          height="1441">
+          <path d="M-1814.48 -359.013H745.519V1080.99H-1814.48V-359.013Z" fill="white" />
+        </mask>
+        <g mask="url(#mask14_2_2)">
+          <path
+            d="M586.25 42.8214C587.178 42.8214 587.941 43.1294 588.541 43.7428C589.14 44.3561 589.44 45.1428 589.44 46.1001C589.44 47.4188 588.982 48.5788 588.069 49.5814C587.156 50.5854 586.13 51.0854 584.993 51.0854C584.094 51.0854 583.345 50.7721 582.746 50.1428C582.148 49.5148 581.849 48.6908 581.849 47.6721C581.849 46.3254 582.282 45.1801 583.152 44.2361C584.02 43.2934 585.052 42.8214 586.25 42.8214ZM568.598 72.5561L566.622 71.0294C569.612 67.7348 572.341 65.3921 574.809 64.0001C577.277 62.6068 579.377 61.9108 581.112 61.9108C582.069 61.9108 582.802 62.1201 583.31 62.5401C583.818 62.9601 584.073 63.5281 584.073 64.2468C584.073 65.1148 583.102 68.7988 581.161 75.2961C577.997 85.9268 576.413 92.3348 576.413 94.5201C576.413 94.9401 576.518 95.2908 576.728 95.5761C576.937 95.8601 577.161 96.0028 577.402 96.0028C578.36 96.0028 580.816 94.1454 584.769 90.4334L586.52 92.1401C582.417 96.0028 579.422 98.4721 577.536 99.5508C575.65 100.629 574.108 101.168 572.91 101.168C571.862 101.168 571.03 100.837 570.417 100.179C569.804 99.5214 569.497 98.6081 569.497 97.4401C569.497 93.6974 571.742 84.5481 576.234 69.9961C576.444 69.3081 576.548 68.6934 576.548 68.1548C576.548 67.5561 576.28 67.2561 575.74 67.2561C575.141 67.2561 574.46 67.4961 573.697 67.9748C572.933 68.4534 571.233 69.9814 568.598 72.5561Z"
+            stroke="white" stroke-width="1.68" stroke-miterlimit="10" />
+        </g>
+      </g>
+      <defs>
+        <clipPath id="clip0_2_2">
+          <rect width="590.279" height="134.066" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+
+  </div>
+  <script src="main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

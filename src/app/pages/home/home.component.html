@@ -1,186 +1,316 @@
+<app-loading #loadingComponent></app-loading>
+
+<!-- &--------------------------------------Home Section--------------------------------------- -->
 <div class="w-100 vh-100 d-block" id="Home_section">
-    <div class="home_content">
-        <!-- سايد بار -->
-        <div class="bg-light sticky-top Side_bar">
-            <img src="https://i.ibb.co/hxYrJLkJ/bitmap.webp" class="Side_v_logo" alt="v-Logo">
-            <div class="d-flex flex-column flex-row flex-nowrap bg-light2 align-items-center white_bg">
-                <ul
-                    class="d-flex nav nav-pills nav-flush flex-column flex-row align-items-center flex-nowrap mb-auto mx-auto text-center align-items-center ul_icon_sidebar">
-                    <li class="li1" style="margin-top: 10px;">
-                        <a (click)="setActiveSidebar(1)" [ngClass]="{'active': activeSidebarIndex === 1}"
-                            class="nav-link nav-item py-3 px-2" title="Home" id="Home">
-                            <i class="bi bi-house fs-3"></i>
-                        </a>
-                    </li>
-                    <li class="li2">
-                        <a (click)="setActiveSidebar(2); toggleDetectionMenu()"
-                            [ngClass]="{'active': activeSidebarIndex === 2}"
-                            class="nav-link nav-item py-3 px-2 detection_icon" title="Detection" id="detect">
-                            <div id="icon_land"></div>
-                        </a>
-                    </li>
-                    <li class="li3">
-                        <a (click)="setActiveSidebar(3)" [ngClass]="{'active': activeSidebarIndex === 3}"
-                            class="nav-link nav-item py-3 px-2" title="Dashboard">
-                            <i class="bi-speedometer2 fs-3"></i>
-                        </a>
-                    </li>
-                </ul>
+  <div class="home_content">
+    <!-- سايد بار -->
+    <div class="bg-light sticky-top Side_bar">
+      <img src="https://i.ibb.co/hxYrJLkJ/bitmap.webp" class="Side_v_logo" alt="v-Logo">
+      <div class="d-flex flex-column flex-row flex-nowrap bg-light2 align-items-center white_bg">
+        <ul
+          class="d-flex nav nav-pills nav-flush flex-column flex-row align-items-center flex-nowrap mb-auto mx-auto text-center align-items-center ul_icon_sidebar">
+          <li class="li1" style="margin-top: 10px;">
+            <a (click)="setActiveSidebar(1)" [ngClass]="{'active': activeSidebarIndex === 1}"
+              class="nav-link nav-item py-3 px-2" title="Home" id="Home">
+              <i class="bi bi-house fs-3"></i>
+            </a>
+          </li>
+          <li class="li2">
+            <a (click)="setActiveSidebar(2)" [ngClass]="{'active': activeSidebarIndex === 2}"
+              class="nav-link nav-item py-3 px-2 detection_icon" title="Detection" id="detect">
+              <div id="icon_land"></div>
+            </a>
+          </li>
+          <li class="li3">
+            <a (click)="setActiveSidebar(3)" [ngClass]="{'active': activeSidebarIndex === 3}"
+              class="nav-link nav-item py-3 px-2" title="Dashboard">
+              <i class="bi-speedometer2 fs-3"></i>
+            </a>
+          </li>
+        </ul>
 
-                <a class="py-2 px-2 mb-2 nav-link nav-item" id="dropdownUser3">
-                    <i class="bi-person-circle h2"></i>
-                </a>
+        <a class="py-2 px-2 mb-2 nav-link nav-item" id="dropdownUser3"
+          (click)="toggleProfileMenu(); $event.stopPropagation()" [ngClass]="{'active': activeSidebarIndex === 99}">
+          <i class="bi-person-circle"></i>
+        </a>
+        <div class="list_detection1 li6" id="profile_list" *ngIf="showProfileMenu" (click)="$event.stopPropagation()">
+          <ul class="d-flex flex-column align-items-center justify-content-center shadow ">
+            <li><a class="dropdown-item">New project...</a></li>
+            <li><a class="dropdown-item">Settings</a></li>
+            <li><a class="dropdown-item">Profile</a></li>
+            <li class="dropdown-item Log_out1">
+              <a class="dropdown-item Log_out" (click)="logout()">Log Out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- قائمة الخدمات الجانبية -->
+      <div class="list_detection" [ngStyle]="{display: showDetectionMenu ? 'block' : 'none'}"
+        (click)="$event.stopPropagation()">
+        <div class="list_Service_container">
+
+          <!-- Monitoring Projects -->
+          <div style="position: relative; display: flex; align-items: flex-start;"
+            (mouseenter)="openSubmenu('monitoring')" (mouseleave)="closeSubmenu()">
+            <li class="Montoring_project">
+              <a class="dropdown-item1 monitoring">Monitoring Projects</a>
+            </li>
+            <div class="list_detection2" style="top:-15px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'monitoring' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Project')">Tanzania Mega Mall</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Azuri_Towers_Nigeria')">Azuri Towers
+                    Nigeria</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('TATU_CITY_KENYA')">Tatu City Kenya</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Infrastructure_project')">Infrastructure
+                    project</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Ain_Sokhna_Port')">Ain Sokhna Port</a></li>
+              </ul>
             </div>
-            <!-- باقي القوائم الفرعية يمكن نقلها لاحقًا -->
-            <!-- قائمة الخدمات الجانبية -->
-            <div class="list_detection" [ngStyle]="{display: showDetectionMenu ? 'block' : 'none'}">
-                <div class="list_Service_container">
+          </div>
 
-                    <!-- Monitoring Projects -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('monitoring')" (mouseleave)="closeSubmenu()">
-                        <li class="Montoring_project">
-                            <a class="dropdown-item1 monitoring">Monitoring Projects</a>
-                        </li>
-                        <div class="list_detection2" style="top:-10px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'monitoring' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">Tanzania Mega Mall</a></li>
-                                <li><a class="dropdown-item1">Azuri Towers Nigeria</a></li>
-                                <li><a class="dropdown-item1">Tatu City Kenya</a></li>
-                                <li><a class="dropdown-item1">Infrastructure project</a></li>
-                                <li><a class="dropdown-item1">Ain Sokhna Port</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Land Management -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('land')" (mouseleave)="closeSubmenu()">
-                        <li class="Land_Management">
-                            <a class="dropdown-item1">Land Management</a>
-                        </li>
-                        <div class="list_detection2" style="top:-10px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'land' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">Land Use</a></li>
-                                <li><a class="dropdown-item1">Land Cover</a></li>
-                                <li><a class="dropdown-item1">Buildings Detection South-Africa</a></li>
-                                <li><a class="dropdown-item1">Change Detection Cairo (Egypt)</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Forestry -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('forestry')" (mouseleave)="closeSubmenu()">
-                        <li class="Forestry">
-                            <a class="dropdown-item1">Forestry</a>
-                        </li>
-                        <div class="list_detection2" style="top:-10px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'forestry' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">Forest Logging Detection</a></li>
-                                <li><a class="dropdown-item1">Wildfires Detection</a></li>
-                                <li><a class="dropdown-item1">Detect Rice Straw Burning</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Agriculture -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('agriculture')" (mouseleave)="closeSubmenu()">
-                        <li class="Agriculture">
-                            <a class="dropdown-item1">Agriculture</a>
-                        </li>
-                        <div class="list_detection2" style="top:-10px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'agriculture' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">Crop Disease Detection</a></li>
-                                <li><a class="dropdown-item1">Crop Health</a></li>
-                                <li><a class="dropdown-item1">Crop Classification Kenya</a></li>
-                                <li><a class="dropdown-item1">Crop Classification Damietta(Egypt)</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Mineral Resources -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('mineral')" (mouseleave)="closeSubmenu()">
-                        <li class="Mineral_Resources">
-                            <a class="dropdown-item1">Mineral Resources Management</a>
-                        </li>
-                        <div class="list_detection2" style="top:-10px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'mineral' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">Oil Spill Detection</a></li>
-                                <li><a class="dropdown-item1">Mining Monitoring</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Water Resources -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('water')" (mouseleave)="closeSubmenu()">
-                        <li class="Water_Resources">
-                            <a class="dropdown-item1">Water Resources Management</a>
-                        </li>
-                        <div class="list_detection2" style="top:-10px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'water' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">Renaissance Dam</a></li>
-                                <li><a class="dropdown-item1">Libya Flooding</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- National Security & Defense -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('security')" (mouseleave)="closeSubmenu()">
-                        <li class="National_Security_Defense">
-                            <a class="dropdown-item1">National Security & Defense</a>
-                        </li>
-                        <div class="list_detection2" style="top:-10px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'security' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">Khartoum Airport</a></li>
-                                <li><a class="dropdown-item1">Crisis in Sudan Border</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Palm Tree -->
-                    <div style="position: relative; display: flex; align-items: flex-start;"
-                        (mouseenter)="openSubmenu('palm')" (mouseleave)="closeSubmenu()">
-                        <li class="palm_tree">
-                            <a class="dropdown-item1">Tree & Palm Tree</a>
-                        </li>
-                        <div class="list_detection2" style="top:-250px; left: 100%; min-width:295px;"
-                            [ngStyle]="{display: submenuOpen === 'palm' ? 'block' : 'none'}">
-                            <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                                <li><a class="dropdown-item1">فيحان الحربي</a></li>
-                                <li><a class="dropdown-item1">عبدالعزيز الخليفة</a></li>
-                                <li><a class="dropdown-item1">عويد عطالله عواض المطيري</a></li>
-                                <li><a class="dropdown-item1">مدوخ بن هلال بن منير المطيري</a></li>
-                                <li><a class="dropdown-item1">ثامر خلف مشيعان العضيلة</a></li>
-                                <li><a class="dropdown-item1">ملحق بن عاقل عواض المطيري</a></li>
-                                <li><a class="dropdown-item1">تراحيب فيحان مصلح العضيلة</a></li>
-                                <li><a class="dropdown-item1">منصور محمد بندر الحربي</a></li>
-                                <li><a class="dropdown-item1">منزل نافل الخمشي</a></li>
-                                <li><a class="dropdown-item1">بندر الشملان</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
+          <!-- Land Management -->
+          <div style="position: relative; display: flex; align-items: flex-start;" (mouseenter)="openSubmenu('land')"
+            (mouseleave)="closeSubmenu()">
+            <li class="Land_Management">
+              <a class="dropdown-item1">Land Management</a>
+            </li>
+            <div class="list_detection2" style="top:-15px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'land' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Land_Use')">Land Use</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Land_Cover')">Land Cover</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Squatters_Camps')">Buildings Detection
+                    South-Africa</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Cahnge_Detection_Cairo')">Change Detection
+                    Cairo (Egypt)</a></li>
+              </ul>
             </div>
+          </div>
 
+          <!-- Forestry -->
+          <div style="position: relative; display: flex; align-items: flex-start;"
+            (mouseenter)="openSubmenu('forestry')" (mouseleave)="closeSubmenu()">
+            <li class="Forestry">
+              <a class="dropdown-item1">Forestry</a>
+            </li>
+            <div class="list_detection2" style="top:-15px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'forestry' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Forest_Logging_Detection')">Forest Logging
+                    Detection</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Wildfires')">Wildfires Detection</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Detect_rice_straw_burning')">Detect Rice
+                    Straw Burning</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Agriculture -->
+          <div style="position: relative; display: flex; align-items: flex-start;"
+            (mouseenter)="openSubmenu('agriculture')" (mouseleave)="closeSubmenu()">
+            <li class="Agriculture">
+              <a class="dropdown-item1">Agriculture</a>
+            </li>
+            <div class="list_detection2" style="top:-15px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'agriculture' ? 'block' : 'none'}"
+              (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Crop_Disease_Detection')">Crop Disease
+                    Detection</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Crop_Health')">Crop Health</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Crop_Classification')">Crop Classification
+                    Kenya</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Dumyat')">Crop Classification
+                    Damietta(Egypt)</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Mineral Resources -->
+          <div style="position: relative; display: flex; align-items: flex-start;" (mouseenter)="openSubmenu('mineral')"
+            (mouseleave)="closeSubmenu()">
+            <li class="Mineral_Resources">
+              <a class="dropdown-item1">Mineral Resources Management</a>
+            </li>
+            <div class="list_detection2" style="top:-15px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'mineral' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Oil_Spill_Detection')">Oil Spill
+                    Detection</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Mining_Monitoring')">Mining Monitoring</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Water Resources -->
+          <div style="position: relative; display: flex; align-items: flex-start;" (mouseenter)="openSubmenu('water')"
+            (mouseleave)="closeSubmenu()">
+            <li class="Water_Resources">
+              <a class="dropdown-item1">Water Resources Management</a>
+            </li>
+            <div class="list_detection2" style="top:-15px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'water' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Renaissance_Dam')">Renaissance Dam</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Libya_Flooding')">Libya Flooding</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- National Security & Defense -->
+          <div style="position: relative; display: flex; align-items: flex-start;"
+            (mouseenter)="openSubmenu('security')" (mouseleave)="closeSubmenu()">
+            <li class="National_Security_Defense">
+              <a class="dropdown-item1">National Security & Defense</a>
+            </li>
+            <div class="list_detection2" style="top:-15px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'security' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('khartoum_airport')">Khartoum Airport</a>
+                </li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('Sudan_Border')">Crisis in Sudan Border</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Palm Tree -->
+          <div style="position: relative; display: flex; align-items: flex-start;" (mouseenter)="openSubmenu('palm')"
+            (mouseleave)="closeSubmenu()">
+            <li class="palm_tree">
+              <a class="dropdown-item1">Tree & Palm Tree</a>
+            </li>
+            <div class="list_detection2" style="top:-250px; left: 100.2%;; min-width:295px;"
+              [ngStyle]="{display: submenuOpen === 'palm' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
+              <ul class="d-flex flex-column align-items-center justify-content-center shadow">
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('1')">فيحان الحربي</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('2')">عبدالعزيز الخليفة</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('3')">عويد عطالله عواض المطيري</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('4')">مدوخ بن هلال بن منير المطيري</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('5')">ثامر خلف مشيعان العضيلة</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('6')">ملحق بن عاقل عواض المطيري</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('7')">تراحيب فيحان مصلح العضيلة</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('8')">منصور محمد بندر الحربي</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('9')">منزل نافل الخمشي</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('10')">بندر الشملان</a></li>
+              </ul>
+            </div>
+          </div>
 
         </div>
-        <!-- الخريطة/المحتوى الرئيسي -->
-        <div class="d-block justify-content-center align-items-center map vw-100 vh-100 overflow-hidden"
-            id="map_section">
-            <div class="d-flex" id="map"></div>
-        </div>
+      </div>
+
+
+
     </div>
+    <!-- الخريطة/المحتوى الرئيسي -->
+    <div class="d-block justify-content-center align-items-center map vw-100 vh-100 overflow-hidden" id="map_section">
+      <app-map-view (polygonSelected)="onPolygonSelected($event)" (mapLoaded)="onMapLoaded()"></app-map-view>
+    </div>
+
+
+    <div *ngIf="currentLayerConfig" id="dialog_detect" class="dialog_detect row">
+      <div class="container_data_dialog" id="container_data_dialog" *ngIf="currentLayerConfig.showDashboard">
+        <div class="container_dashbord col-md-7 col-sm-7" [ngStyle]="{
+              width: currentLayerConfig.styles?.dashbordWidth,
+              height: currentLayerConfig.styles?.dashbordHeight
+            }">
+          <div id="page">
+            <div class="news_image" *ngIf="currentLayerConfig.display?.news">
+              <a id="url_news" target="blank" [href]="currentLayerConfig.newsLink">
+                <img [src]="currentLayerConfig.images?.news" alt="" id="news"
+                  [ngStyle]="{height: currentLayerConfig.styles?.newsHeight}" />
+              </a>
+            </div>
+            <div class="wrapper" #wrapper>
+              <!-- &------------ Select Date ------------------ -->
+              <div class="select-menu1" id="right_selector" [ngClass]="{'active': showRightDates}">
+                <div class="select-btn1" (click)="toggleRightDates(); $event.stopPropagation()">
+                  <span class="sBtn-text1">{{currentLayerConfig.rightDate}}</span>
+                  <i class="bx bx-chevron-down" [ngClass]="{'rotated': showRightDates}"></i>
+                </div>
+                <div class="options1" (click)="$event.stopPropagation()">
+                  <div class="list_date_container">
+                    <div class="ul_container2">
+                      <ul id="image_date_right">
+                        <li class="option1" *ngFor="let date of currentLayerConfig.rightDates"
+                          (click)="selectRightDate(date)">
+                          <span class="option-text1">{{date}}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="select-menu" id="left_selector" [ngClass]="{'active': showLeftDates}">
+                <div class="select-btn" (click)="toggleLeftDates(); $event.stopPropagation()">
+                  <span class="sBtn-text">{{currentLayerConfig.leftDate}}</span>
+                  <i class="bx bx-chevron-down" [ngClass]="{'rotated': showLeftDates}"></i>
+                </div>
+                <div class="options" (click)="$event.stopPropagation()">
+                  <div class="list_date_container">
+                    <div class="ul_container2">
+                      <ul id="image_date_left">
+                        <li class="option" *ngFor="let date of currentLayerConfig.leftDates"
+                          (click)="selectLeftDate(date)">
+                          <span class="option-text">{{date}}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              
+              <!-- &------------End Select Date ------------------ -->
+
+              <div class="before">
+                <img class="content-image" id="img_left" [src]="currentLayerConfig.images?.left" draggable="false" />
+              </div>
+              <div class="after" #after>
+                <img class="content-image" id="img_right" [src]="currentLayerConfig.images?.right" draggable="false" />
+              </div>
+              <div class="scroller" #scroller (mousedown)="onSliderMouseDown($event)"
+                (touchstart)="onSliderTouchStart($event)">
+                <svg class="scroller__thumb" xmlns="http://www.w3.org/2000/svg" width="100" height="100"
+                  viewBox="0 0 100 100">
+                  <polygon points="0 50 37 68 37 32 0 50" style="fill: #fff" />
+                  <polygon points="100 50 64 32 64 68 100 50" style="fill: #fff" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container_dash col-md-5 col-sm-5">
+          <div class="dashbord d-flex flex-column">
+            <div class="timeline" [ngStyle]="{height: currentLayerConfig.styles?.timelineHeight}">
+              <img id="dashbord_img1" [src]="currentLayerConfig.images?.dash1" alt=""
+                *ngIf="currentLayerConfig.display?.dash1">
+            </div>
+            <div class="container_row2" [ngStyle]="{height: currentLayerConfig.styles?.containerRow2Height}">
+              <div class="piechart col-md-7" [ngStyle]="{width: currentLayerConfig.styles?.element7Width}">
+                <img id="dashbord_img2" [src]="currentLayerConfig.images?.dash2" alt=""
+                  *ngIf="currentLayerConfig.display?.dash2">
+              </div>
+              <div class="parchart col-md-5">
+                <img id="dashbord_img3" [src]="currentLayerConfig.images?.dash3" alt=""
+                  *ngIf="currentLayerConfig.display?.dash3">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="video_container" id="video_container" *ngIf="currentLayerConfig.showVideo">
+        <video id="video_element" class="custom-video__video" width="100%" height="100%" controls muted autoplay>
+          <source id="video_image" [src]="currentLayerConfig.videoSrc" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <button (click)="closePopup()" class="popup_close" style="position:absolute;top:7px;left:7px;">×</button>
+    </div>
+
+  </div>
 </div>

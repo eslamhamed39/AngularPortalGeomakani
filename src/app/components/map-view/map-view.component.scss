@@ -1,0 +1,22 @@
+#tt-map {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  border-radius: 0;
+}
+  
+.watermark {
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+  width: 8%;
+  z-index: 1;
+}
+
+.watermark img {
+  width: 100%;
+  opacity: 0.5;
+}
+
+.tt-attribution { display: none !important; }
