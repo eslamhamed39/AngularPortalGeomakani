@@ -1,0 +1,167 @@
+{
+  "Home": {
+    "center": [21.667170602629522, 4.012114320491342],
+    "zoom": 2.2,
+    "pitch": 0
+  },
+  "Forest_Logging_Detection": {
+    "center": [25.13647, 0.47325],
+    "zoom": 13,
+    "pitch": 45
+  },
+  "Land_Cover": {
+    "center": [-5.6402, 35.2132],
+    "zoom": 9,
+    "pitch": 45
+  },
+  "Project": {
+    "center": [39.2022738, -6.6880111],
+    "zoom": 16,
+    "pitch": 45
+  },
+  "Land_Use": {
+    "center": [16.415, 27.525],
+    "zoom": 4.8,
+    "pitch": 45
+  },
+  "Squatters_Camps": {
+    "center": [31.0187547, -29.8457573],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "Azuri_Towers_Nigeria": {
+    "center": [3.4063485, 6.4027519],
+    "zoom": 16.9,
+    "pitch": 45
+  },
+  "TATU_CITY_KENYA": {
+    "center": [36.8897801, -1.1556409],
+    "zoom": 16,
+    "pitch": 45
+  },
+  "Crop_Classification": {
+    "center": [37.934, 0.927],
+    "zoom": 5.5,
+    "pitch": 45
+  },
+  "Mining_Monitoring": {
+    "center": [39.379219, -7.161839],
+    "zoom": 15,
+    "pitch": 45
+  },
+  "Oil_Spill_Detection": {
+    "center": [32.21209, 31.50670],
+    "zoom": 8.5,
+    "pitch": 45
+  },
+  "Wildfires": {
+    "center": [4.82700, 36.69667],
+    "zoom": 9,
+    "pitch": 45
+  },
+  "Crop_Disease_Detection": {
+    "center": [35.25887, -0.38983],
+    "zoom": 13,
+    "pitch": 45
+  },
+  "Crop_Health": {
+    "center": [36.05687, -0.23038],
+    "zoom": 13,
+    "pitch": 45
+  },
+  "Infrastructure_project": {
+    "center": [3.9154647, 8.1104762],
+    "zoom": 14,
+    "pitch": 45
+  },
+  "Libya_Flooding": {
+    "center": [22.638857, 32.758258],
+    "zoom": 14,
+    "pitch": 45
+  },
+  "khartoum_airport": {
+    "center": [32.552265, 15.591284],
+    "zoom": 13,
+    "pitch": 45
+  },
+  "Renaissance_Dam": {
+    "center": [35.089010, 11.214324],
+    "zoom": 13.5,
+    "pitch": 45
+  },
+  "Sudan_Border": {
+    "center": [31.152342, 21.999103],
+    "zoom": 13.5,
+    "pitch": 45
+  },
+  "Dumyat": {
+    "center": [31.7461, 31.4020],
+    "zoom": 8.9,
+    "pitch": 45
+  },
+  "Cahnge_Detection_Cairo": {
+    "center": [31.6104, 29.9992],
+    "zoom": 8.9,
+    "pitch": 45
+  },
+  "Ain_Sokhna_Port": {
+    "center": [32.34167, 29.64314],
+    "zoom": 11,
+    "pitch": 45
+  },
+  "Detect_rice_straw_burning": {
+    "center": [29.698, 27.127],
+    "zoom": 4.8,
+    "pitch": 45
+  },
+  "1": {
+    "center": [43.5904433, 25.3306318],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "2": {
+    "center": [43.4305268, 25.7923515],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "3": {
+    "center": [43.9864454, 25.5295076],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "4": {
+    "center": [43.9764618, 25.5994940],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "5": {
+    "center": [43.9622505, 25.3749770],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "6": {
+    "center": [43.9360850, 25.3633250],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "7": {
+    "center": [43.88081962, 25.46766756],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "8": {
+    "center": [43.3960008, 26.1624580],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "9": {
+    "center": [44.14331397, 26.89133424],
+    "zoom": 18,
+    "pitch": 45
+  },
+  "10": {
+    "center": [44.21888586, 26.68871151],
+    "zoom": 18,
+    "pitch": 45
+  }
+} 

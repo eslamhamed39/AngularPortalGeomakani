@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.layersConfig = data;
-          console.log('Layers config loaded successfully:', this.layersConfig);
+          // console.log('Layers config loaded successfully:', this.layersConfig);
         },
         error: (error) => {
           console.error('Error loading layers config:', error);
@@ -179,8 +179,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onPolygonSelected(event: { layer: string }) {
     this.showDetectionMenu = false; // Close list_detection if open
-    console.log('onPolygonSelected called with layer:', event.layer);
-    console.log('Available layers:', Object.keys(this.layersConfig));
+    // console.log('onPolygonSelected called with layer:', event.layer);
+    // console.log('Available layers:', Object.keys(this.layersConfig));
     
     // Set polygon click flag to prevent immediate closing
     this.isPolygonClickInProgress = true;
@@ -188,7 +188,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     // Prevent immediate closing by adding a small delay
     setTimeout(() => {
       this.currentLayerConfig = this.layersConfig[event.layer] || null;
-      console.log('Current layer config set to:', this.currentLayerConfig);
+      // console.log('Current layer config set to:', this.currentLayerConfig);
       
       this.popupData = this.currentLayerConfig;
       this.sliderX = 250;
@@ -220,41 +220,41 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (event) {
       event.stopPropagation();
     }
-    console.log('toggleLeftDates called');
-    console.log('Current showLeftDates:', this.showLeftDates);
-    console.log('Current layer config:', this.currentLayerConfig);
-    console.log('Left dates available:', this.currentLayerConfig?.leftDates);
+    // console.log('toggleLeftDates called');
+    // console.log('Current showLeftDates:', this.showLeftDates);
+    // console.log('Current layer config:', this.currentLayerConfig);
+    // console.log('Left dates available:', this.currentLayerConfig?.leftDates);
     
     this.showLeftDates = !this.showLeftDates;
     this.showRightDates = false;
     
-    console.log('New showLeftDates:', this.showLeftDates);
+    // console.log('New showLeftDates:', this.showLeftDates);
   }
   
   toggleRightDates(event?: Event) {
     if (event) {
       event.stopPropagation();
     }
-    console.log('toggleRightDates called');
-    console.log('Current showRightDates:', this.showRightDates);
-    console.log('Current layer config:', this.currentLayerConfig);
-    console.log('Right dates available:', this.currentLayerConfig?.rightDates);
+    // console.log('toggleRightDates called');
+    // console.log('Current showRightDates:', this.showRightDates);
+    // console.log('Current layer config:', this.currentLayerConfig);
+    // console.log('Right dates available:', this.currentLayerConfig?.rightDates);
     
     this.showRightDates = !this.showRightDates;
     this.showLeftDates = false;
     
-    console.log('New showRightDates:', this.showRightDates);
+    // console.log('New showRightDates:', this.showRightDates);
   }
   
   selectLeftDate(date: string) {
-    console.log('selectLeftDate called with:', date);
+    // console.log('selectLeftDate called with:', date);
     if (this.currentLayerConfig) {
       this.currentLayerConfig.leftDate = date;
       this.showLeftDates = false;
       
       // Update the left image if we have a mapping for the current layer
       if (this.currentLayerConfig.leftImagesMap && this.currentLayerConfig.leftImagesMap[date]) {
-        console.log('Updating left image to:', this.currentLayerConfig.leftImagesMap[date]);
+        // console.log('Updating left image to:', this.currentLayerConfig.leftImagesMap[date]);
         // Update the currentLayerConfig.images.left for consistency
         this.currentLayerConfig.images.left = this.currentLayerConfig.leftImagesMap[date];
         // Force Angular to detect changes
@@ -264,14 +264,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   selectRightDate(date: string) {
-    console.log('selectRightDate called with:', date);
+    // console.log('selectRightDate called with:', date);
     if (this.currentLayerConfig) {
       this.currentLayerConfig.rightDate = date;
       this.showRightDates = false;
       
       // Update the right image if we have a mapping for the current layer
       if (this.currentLayerConfig.rightImagesMap && this.currentLayerConfig.rightImagesMap[date]) {
-        console.log('Updating right image to:', this.currentLayerConfig.rightImagesMap[date]);
+        // console.log('Updating right image to:', this.currentLayerConfig.rightImagesMap[date]);
         // Update the currentLayerConfig.images.right for consistency
         this.currentLayerConfig.images.right = this.currentLayerConfig.rightImagesMap[date];
         // Force Angular to detect changes

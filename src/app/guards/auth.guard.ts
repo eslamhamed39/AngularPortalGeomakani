@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
 
     // Check if token needs refresh
     if (this.authService.refreshToken()) {
-      console.log('Token refreshed automatically');
+      // console.log('Token refreshed automatically');
     }
 
     // Additional security checks

@@ -23,63 +23,117 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   private defaultZoom = 2.2;
   private mapIsLoaded: boolean = false;
 
-  // اسماء الطبقات المدعومة
-  private layerID_use: string[] = [
-    "Project", "Project_outline", "Forest_Logging_Detection", "Forest_Logging_Detection_outline",
-    "Land_Cover", "Land_Cover_outline", "Squatters_Camps", "Squatters_Camps_outline",
-    "Land_Use", "Land_Use_outline", "Azuri_Towers_Nigeria", "Azuri_Towers_Nigeria_outline",
-    "TATU_CITY_KENYA", "TATU_CITY_KENYA_outline", "Crop_Classification", "Crop_Classification_outline",
-    "Mining_Monitoring", "Mining_Monitoring_outline", "Oil_Spill_Detection", "Oil_Spill_Detection_outline",
-    "Wildfires", "Wildfires_outline", "Crop_Disease_Detection", "Crop_Disease_Detection_outline",
-    "Crop_Health", "Crop_Health_outline", "Infrastructure_project", "Infrastructure_project_outline",
-    "Libya_Flooding", "Libya_Flooding_outline", "khartoum_airport", "khartoum_airport_outline",
-    "Renaissance_Dam", "Renaissance_Dam_outline", "Sudan_Border", "Sudan_Border_outline",
-    "Dumyat", "Dumyat_outline", "Cahnge_Detection_Cairo", "Cahnge_Detection_Cairo_outline",
-    "Ain_Sokhna_Port", "Ain_Sokhna_Port_outline", "Detect_rice_straw_burning", "Detect_rice_straw_burning_outline",
-    "1", "1_outline", "2", "2_outline", "3", "3_outline", "4", "4_outline", "5", "5_outline",
-    "6", "6_outline", "7", "7_outline", "8", "8_outline", "9", "9_outline", "10", "10_outline"
-  ];
-
-  // احداثيات الطبقات واعدادات flyTo (نفس الكود القديم)
-  private flyToConfig: Record<string, { center: [number, number], zoom: number, pitch: number }> = {
-    'Home': { center: [21.667170602629522, 4.012114320491342], zoom: 2.2, pitch: 0 },
-    'Forest_Logging_Detection': { center: [25.13647, 0.47325], zoom: 13, pitch: 45 },
-    'Land_Cover': { center: [-5.6402, 35.2132], zoom: 9, pitch: 45 },
-    'Project': { center: [39.2022738, -6.6880111], zoom: 16, pitch: 45 },
-    'Land_Use': { center: [16.415, 27.525], zoom: 4.8, pitch: 45 },
-    'Squatters_Camps': { center: [31.0187547, -29.8457573], zoom: 18, pitch: 45 },
-    'Azuri_Towers_Nigeria': { center: [3.4063485, 6.4027519], zoom: 16.9, pitch: 45 },
-    'TATU_CITY_KENYA': { center: [36.8897801, -1.1556409], zoom: 16, pitch: 45 },
-    'Crop_Classification': { center: [37.934, 0.927], zoom: 5.5, pitch: 45 },
-    'Mining_Monitoring': { center: [39.379219, -7.161839], zoom: 15, pitch: 45 },
-    'Oil_Spill_Detection': { center: [32.21209, 31.50670], zoom: 8.5, pitch: 45 },
-    'Wildfires': { center: [4.82700, 36.69667], zoom: 9, pitch: 45 },
-    'Crop_Disease_Detection': { center: [35.25887, -0.38983], zoom: 13, pitch: 45 },
-    'Crop_Health': { center: [36.05687, -0.23038], zoom: 13, pitch: 45 },
-    'Infrastructure_project': { center: [3.9154647, 8.1104762], zoom: 14, pitch: 45 },
-    'Libya_Flooding': { center: [22.638857, 32.758258], zoom: 14, pitch: 45 },
-    'khartoum_airport': { center: [32.552265, 15.591284], zoom: 13, pitch: 45 },
-    'Renaissance_Dam': { center: [35.089010, 11.214324], zoom: 13.5, pitch: 45 },
-    'Sudan_Border': { center: [31.152342, 21.999103], zoom: 13.5, pitch: 45 },
-    'Dumyat': { center: [31.7461, 31.4020], zoom: 8.9, pitch: 45 },
-    'Cahnge_Detection_Cairo': { center: [31.6104, 29.9992], zoom: 8.9, pitch: 45 },
-    'Ain_Sokhna_Port': { center: [32.34167, 29.64314], zoom: 11, pitch: 45 },
-    'Detect_rice_straw_burning': { center: [29.698, 27.127], zoom: 4.8, pitch: 45 },
-    '1': { center: [43.5904433, 25.3306318], zoom: 18, pitch: 45 },
-    '2': { center: [43.4305268, 25.7923515], zoom: 18, pitch: 45 },
-    '3': { center: [43.9864454, 25.5295076], zoom: 18, pitch: 45 },
-    '4': { center: [43.9764618, 25.5994940], zoom: 18, pitch: 45 },
-    '5': { center: [43.9622505, 25.3749770], zoom: 18, pitch: 45 },
-    '6': { center: [43.9360850, 25.3633250], zoom: 18, pitch: 45 },
-    '7': { center: [43.88081962, 25.46766756], zoom: 18, pitch: 45 },
-    '8': { center: [43.3960008, 26.1624580], zoom: 18, pitch: 45 },
-    '9': { center: [44.14331397, 26.89133424], zoom: 18, pitch: 45 },
-    '10': { center: [44.21888586, 26.68871151], zoom: 18, pitch: 45 },
-  };
+  // متغيرات لتخزين البيانات من ملفات JSON
+  private layerID_use: string[] = [];
+  private flyToConfig: Record<string, { center: [number, number], zoom: number, pitch: number }> = {};
+  private popupLayers: string[] = [];
+  private hoverLayers: string[] = [];
 
   constructor(private http: HttpClient , private mapControl: MapControlService) { }
 
   ngAfterViewInit(): void {
+    // تحميل البيانات من ملفات JSON أولاً
+    this.loadConfigurationData().then(() => {
+      this.initializeMap();
+    });
+  }
+
+  // تحميل البيانات من ملفات JSON
+  private async loadConfigurationData(): Promise<void> {
+    try {
+      const [supportedLayers, flyToConfig, popupLayers, hoverLayers] = await Promise.all([
+        this.http.get<string[]>('assets/Layer/supportedLayers.json').toPromise(),
+        this.http.get<Record<string, { center: [number, number], zoom: number, pitch: number }>>('assets/Layer/flyToConfig.json').toPromise(),
+        this.http.get<string[]>('assets/Layer/popupLayers.json').toPromise(),
+        this.http.get<string[]>('assets/Layer/hoverLayers.json').toPromise()
+      ]);
+
+      this.layerID_use = supportedLayers || [];
+      this.flyToConfig = flyToConfig || {};
+      this.popupLayers = popupLayers || [];
+      this.hoverLayers = hoverLayers || [];
+    } catch (error) {
+      console.error('Error loading configuration data:', error);
+      // استخدام البيانات الافتراضية في حالة الخطأ
+      this.loadDefaultConfiguration();
+    }
+  }
+
+  // تحميل البيانات الافتراضية في حالة فشل تحميل ملفات JSON
+  private loadDefaultConfiguration(): void {
+    this.layerID_use = [
+      "Project", "Project_outline", "Forest_Logging_Detection", "Forest_Logging_Detection_outline",
+      "Land_Cover", "Land_Cover_outline", "Squatters_Camps", "Squatters_Camps_outline",
+      "Land_Use", "Land_Use_outline", "Azuri_Towers_Nigeria", "Azuri_Towers_Nigeria_outline",
+      "TATU_CITY_KENYA", "TATU_CITY_KENYA_outline", "Crop_Classification", "Crop_Classification_outline",
+      "Mining_Monitoring", "Mining_Monitoring_outline", "Oil_Spill_Detection", "Oil_Spill_Detection_outline",
+      "Wildfires", "Wildfires_outline", "Crop_Disease_Detection", "Crop_Disease_Detection_outline",
+      "Crop_Health", "Crop_Health_outline", "Infrastructure_project", "Infrastructure_project_outline",
+      "Libya_Flooding", "Libya_Flooding_outline", "khartoum_airport", "khartoum_airport_outline",
+      "Renaissance_Dam", "Renaissance_Dam_outline", "Sudan_Border", "Sudan_Border_outline",
+      "Dumyat", "Dumyat_outline", "Cahnge_Detection_Cairo", "Cahnge_Detection_Cairo_outline",
+      "Ain_Sokhna_Port", "Ain_Sokhna_Port_outline", "Detect_rice_straw_burning", "Detect_rice_straw_burning_outline",
+      "1", "1_outline", "2", "2_outline", "3", "3_outline", "4", "4_outline", "5", "5_outline",
+      "6", "6_outline", "7", "7_outline", "8", "8_outline", "9", "9_outline", "10", "10_outline"
+    ];
+
+    this.flyToConfig = {
+      'Home': { center: [21.667170602629522, 4.012114320491342], zoom: 2.2, pitch: 0 },
+      'Forest_Logging_Detection': { center: [25.13647, 0.47325], zoom: 13, pitch: 45 },
+      'Land_Cover': { center: [-5.6402, 35.2132], zoom: 9, pitch: 45 },
+      'Project': { center: [39.2022738, -6.6880111], zoom: 16, pitch: 45 },
+      'Land_Use': { center: [16.415, 27.525], zoom: 4.8, pitch: 45 },
+      'Squatters_Camps': { center: [31.0187547, -29.8457573], zoom: 18, pitch: 45 },
+      'Azuri_Towers_Nigeria': { center: [3.4063485, 6.4027519], zoom: 16.9, pitch: 45 },
+      'TATU_CITY_KENYA': { center: [36.8897801, -1.1556409], zoom: 16, pitch: 45 },
+      'Crop_Classification': { center: [37.934, 0.927], zoom: 5.5, pitch: 45 },
+      'Mining_Monitoring': { center: [39.379219, -7.161839], zoom: 15, pitch: 45 },
+      'Oil_Spill_Detection': { center: [32.21209, 31.50670], zoom: 8.5, pitch: 45 },
+      'Wildfires': { center: [4.82700, 36.69667], zoom: 9, pitch: 45 },
+      'Crop_Disease_Detection': { center: [35.25887, -0.38983], zoom: 13, pitch: 45 },
+      'Crop_Health': { center: [36.05687, -0.23038], zoom: 13, pitch: 45 },
+      'Infrastructure_project': { center: [3.9154647, 8.1104762], zoom: 14, pitch: 45 },
+      'Libya_Flooding': { center: [22.638857, 32.758258], zoom: 14, pitch: 45 },
+      'khartoum_airport': { center: [32.552265, 15.591284], zoom: 13, pitch: 45 },
+      'Renaissance_Dam': { center: [35.089010, 11.214324], zoom: 13.5, pitch: 45 },
+      'Sudan_Border': { center: [31.152342, 21.999103], zoom: 13.5, pitch: 45 },
+      'Dumyat': { center: [31.7461, 31.4020], zoom: 8.9, pitch: 45 },
+      'Cahnge_Detection_Cairo': { center: [31.6104, 29.9992], zoom: 8.9, pitch: 45 },
+      'Ain_Sokhna_Port': { center: [32.34167, 29.64314], zoom: 11, pitch: 45 },
+      'Detect_rice_straw_burning': { center: [29.698, 27.127], zoom: 4.8, pitch: 45 },
+      '1': { center: [43.5904433, 25.3306318], zoom: 18, pitch: 45 },
+      '2': { center: [43.4305268, 25.7923515], zoom: 18, pitch: 45 },
+      '3': { center: [43.9864454, 25.5295076], zoom: 18, pitch: 45 },
+      '4': { center: [43.9764618, 25.5994940], zoom: 18, pitch: 45 },
+      '5': { center: [43.9622505, 25.3749770], zoom: 18, pitch: 45 },
+      '6': { center: [43.9360850, 25.3633250], zoom: 18, pitch: 45 },
+      '7': { center: [43.88081962, 25.46766756], zoom: 18, pitch: 45 },
+      '8': { center: [43.3960008, 26.1624580], zoom: 18, pitch: 45 },
+      '9': { center: [44.14331397, 26.89133424], zoom: 18, pitch: 45 },
+      '10': { center: [44.21888586, 26.68871151], zoom: 18, pitch: 45 },
+    };
+
+    this.popupLayers = [
+      'Project', 'Forest_Logging_Detection', 'Land_Cover', 'Land_Use', 'Squatters_Camps',
+      'Azuri_Towers_Nigeria', 'TATU_CITY_KENYA', 'Crop_Classification', 'Mining_Monitoring',
+      'Oil_Spill_Detection', 'Wildfires', 'Crop_Disease_Detection', 'Crop_Health',
+      'Infrastructure_project', 'Libya_Flooding', 'khartoum_airport', 'Renaissance_Dam',
+      'Sudan_Border', 'Dumyat', 'Cahnge_Detection_Cairo', 'Ain_Sokhna_Port', 'Detect_rice_straw_burning',
+      '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
+    ];
+
+    this.hoverLayers = [
+      'Land_Cover', 'Land_Use', 'Project', 'Forest_Logging_Detection', 'Squatters_Camps',
+      'Azuri_Towers_Nigeria', 'TATU_CITY_KENYA', 'Crop_Classification', 'Mining_Monitoring',
+      'Oil_Spill_Detection', 'Wildfires', 'Crop_Disease_Detection', 'Crop_Health',
+      'Infrastructure_project', 'Libya_Flooding', 'khartoum_airport', 'Renaissance_Dam',
+      'Sudan_Border', 'Dumyat', 'Cahnge_Detection_Cairo', 'Ain_Sokhna_Port', 'Detect_rice_straw_burning',
+      '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
+    ];
+  }
+
+  // إعداد الخريطة
+  private initializeMap(): void {
     // إعداد الخريطة TomTom
     const viewport_height = window.innerHeight;
     const zoom = viewport_height < 620 ? 1.6 : this.defaultZoom;
@@ -126,14 +180,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     this.layerID_use.forEach(layerId => this.setCursor(layerId));
 
     // إضافة Hover effect (ألوان) على الطبقات
-    [
-      'Land_Cover', 'Land_Use', 'Project', 'Forest_Logging_Detection', 'Squatters_Camps',
-      'Azuri_Towers_Nigeria', 'TATU_CITY_KENYA', 'Crop_Classification', 'Mining_Monitoring',
-      'Oil_Spill_Detection', 'Wildfires', 'Crop_Disease_Detection', 'Crop_Health',
-      'Infrastructure_project', 'Libya_Flooding', 'khartoum_airport', 'Renaissance_Dam',
-      'Sudan_Border', 'Dumyat', 'Cahnge_Detection_Cairo', 'Ain_Sokhna_Port', 'Detect_rice_straw_burning',
-      '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-    ].forEach(layerId => this.addHoverEffect(layerId));
+    this.hoverLayers.forEach(layerId => this.addHoverEffect(layerId));
 
     // إضافة أحداث الفلاي تو لكل طبقة
     Object.entries(this.flyToConfig).forEach(([id, conf]) => {
@@ -148,16 +195,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
 
     // إضافة أحداث النقر للطبقات مع popup
-    const popupLayers = [
-      'Project', 'Forest_Logging_Detection', 'Land_Cover', 'Land_Use', 'Squatters_Camps',
-      'Azuri_Towers_Nigeria', 'TATU_CITY_KENYA', 'Crop_Classification', 'Mining_Monitoring',
-      'Oil_Spill_Detection', 'Wildfires', 'Crop_Disease_Detection', 'Crop_Health',
-      'Infrastructure_project', 'Libya_Flooding', 'khartoum_airport', 'Renaissance_Dam',
-      'Sudan_Border', 'Dumyat', 'Cahnge_Detection_Cairo', 'Ain_Sokhna_Port', 'Detect_rice_straw_burning',
-      '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-    ];
-
-    popupLayers.forEach((layerName: string) => {
+    this.popupLayers.forEach((layerName: string) => {
       this.map!.on('click', layerName, (e: any) => {
         this.polygonSelected.emit({ layer: layerName });
       });
