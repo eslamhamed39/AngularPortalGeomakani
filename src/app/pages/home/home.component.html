@@ -211,22 +211,22 @@
     </div>
 
 
-    <div *ngIf="currentLayerConfig" id="dialog_detect" class="dialog_detect row">
-      <div class="container_data_dialog" id="container_data_dialog" *ngIf="currentLayerConfig.showDashboard">
+    <div *ngIf="currentLayerConfig" id="dialog_detect" class="dialog_detect row" (click)="closeDateSelectorsOnContainer($event)">
+      <div class="container_data_dialog" id="container_data_dialog" *ngIf="currentLayerConfig.showDashboard" (click)="$event.stopPropagation()">
         <div class="container_dashbord col-md-7 col-sm-7" [ngStyle]="{
               width: currentLayerConfig.styles?.dashbordWidth,
               height: currentLayerConfig.styles?.dashbordHeight
-            }">
-          <div id="page">
-            <div class="news_image" *ngIf="currentLayerConfig.display?.news">
-              <a id="url_news" target="blank" [href]="currentLayerConfig.newsLink">
+            }" (click)="closeDateSelectorsOnContainer($event)">
+          <div id="page" (click)="$event.stopPropagation()">
+            <div class="news_image" *ngIf="currentLayerConfig.display?.news" (click)="$event.stopPropagation()">
+              <a id="url_news" target="blank" [href]="currentLayerConfig.newsLink" (click)="$event.stopPropagation()">
                 <img [src]="currentLayerConfig.images?.news" alt="" id="news"
                   [ngStyle]="{height: currentLayerConfig.styles?.newsHeight}" />
               </a>
             </div>
-            <div class="wrapper" #wrapper>
+            <div class="wrapper" #wrapper (click)="$event.stopPropagation()">
               <!-- &------------ Select Date ------------------ -->
-              <div class="select-menu1" id="right_selector" [ngClass]="{'active': showRightDates}">
+              <div class="select-menu1" id="right_selector" [ngClass]="{'active': showRightDates}" (click)="$event.stopPropagation()">
                 <div class="select-btn1" (click)="toggleRightDates(); $event.stopPropagation()">
                   <span class="sBtn-text1">{{currentLayerConfig.rightDate}}</span>
                   <i class="bx bx-chevron-down" [ngClass]="{'rotated': showRightDates}"></i>
@@ -236,7 +236,7 @@
                     <div class="ul_container2">
                       <ul id="image_date_right">
                         <li class="option1" *ngFor="let date of currentLayerConfig.rightDates"
-                          (click)="selectRightDate(date)">
+                          (click)="selectRightDate(date); $event.stopPropagation()">
                           <span class="option-text1">{{date}}</span>
                         </li>
                       </ul>
@@ -245,7 +245,7 @@
                 </div>
               </div>
               
-              <div class="select-menu" id="left_selector" [ngClass]="{'active': showLeftDates}">
+              <div class="select-menu" id="left_selector" [ngClass]="{'active': showLeftDates}" (click)="$event.stopPropagation()">
                 <div class="select-btn" (click)="toggleLeftDates(); $event.stopPropagation()">
                   <span class="sBtn-text">{{currentLayerConfig.leftDate}}</span>
                   <i class="bx bx-chevron-down" [ngClass]="{'rotated': showLeftDates}"></i>
@@ -255,7 +255,7 @@
                     <div class="ul_container2">
                       <ul id="image_date_left">
                         <li class="option" *ngFor="let date of currentLayerConfig.leftDates"
-                          (click)="selectLeftDate(date)">
+                          (click)="selectLeftDate(date); $event.stopPropagation()">
                           <span class="option-text">{{date}}</span>
                         </li>
                       </ul>
@@ -267,14 +267,14 @@
               
               <!-- &------------End Select Date ------------------ -->
 
-              <div class="before">
+              <div class="before" (click)="$event.stopPropagation()">
                 <img class="content-image" id="img_left" [src]="currentLayerConfig.images?.left" draggable="false" />
               </div>
-              <div class="after" #after>
+              <div class="after" #after (click)="$event.stopPropagation()">
                 <img class="content-image" id="img_right" [src]="currentLayerConfig.images?.right" draggable="false" />
               </div>
               <div class="scroller" #scroller (mousedown)="onSliderMouseDown($event)"
-                (touchstart)="onSliderTouchStart($event)">
+                (touchstart)="onSliderTouchStart($event)" (click)="$event.stopPropagation()">
                 <svg class="scroller__thumb" xmlns="http://www.w3.org/2000/svg" width="100" height="100"
                   viewBox="0 0 100 100">
                   <polygon points="0 50 37 68 37 32 0 50" style="fill: #fff" />
@@ -284,18 +284,18 @@
             </div>
           </div>
         </div>
-        <div class="container_dash col-md-5 col-sm-5">
-          <div class="dashbord d-flex flex-column">
-            <div class="timeline" [ngStyle]="{height: currentLayerConfig.styles?.timelineHeight}">
+        <div class="container_dash col-md-5 col-sm-5" (click)="closeDateSelectorsOnContainer($event)">
+          <div class="dashbord d-flex flex-column" (click)="$event.stopPropagation()">
+            <div class="timeline" [ngStyle]="{height: currentLayerConfig.styles?.timelineHeight}" (click)="$event.stopPropagation()">
               <img id="dashbord_img1" [src]="currentLayerConfig.images?.dash1" alt=""
                 *ngIf="currentLayerConfig.display?.dash1">
             </div>
-            <div class="container_row2" [ngStyle]="{height: currentLayerConfig.styles?.containerRow2Height}">
-              <div class="piechart col-md-7" [ngStyle]="{width: currentLayerConfig.styles?.element7Width}">
+            <div class="container_row2" [ngStyle]="{height: currentLayerConfig.styles?.containerRow2Height}" (click)="$event.stopPropagation()">
+              <div class="piechart col-md-7" [ngStyle]="{width: currentLayerConfig.styles?.element7Width}" (click)="$event.stopPropagation()">
                 <img id="dashbord_img2" [src]="currentLayerConfig.images?.dash2" alt=""
                   *ngIf="currentLayerConfig.display?.dash2">
               </div>
-              <div class="parchart col-md-5">
+              <div class="parchart col-md-5" (click)="$event.stopPropagation()">
                 <img id="dashbord_img3" [src]="currentLayerConfig.images?.dash3" alt=""
                   *ngIf="currentLayerConfig.display?.dash3">
               </div>
@@ -303,13 +303,13 @@
           </div>
         </div>
       </div>
-      <div class="video_container" id="video_container" *ngIf="currentLayerConfig.showVideo">
+      <div class="video_container" id="video_container" *ngIf="currentLayerConfig.showVideo" (click)="closeDateSelectorsOnContainer($event)">
         <video id="video_element" class="custom-video__video" width="100%" height="100%" controls muted autoplay>
           <source id="video_image" [src]="currentLayerConfig.videoSrc" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
-      <button (click)="closePopup()" class="popup_close" style="position:absolute;top:7px;left:7px;">×</button>
+      <!-- <button (click)="closePopup(); $event.stopPropagation()" class="popup_close" style="position:absolute;top:7px;left:7px;">×</button> -->
     </div>
 
   </div>
