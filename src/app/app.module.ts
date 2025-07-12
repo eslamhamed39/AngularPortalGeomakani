@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './pages/home/home.component';
 import { MapViewComponent } from './components/map-view/map-view.component';
 import { LoadingComponent } from './loading/loading.component';
+import { BootstrapToastContainerComponent } from './components/bootstrap-toast-container/bootstrap-toast-container.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { LoadingComponent } from './loading/loading.component';
     LoginComponent,
     HomeComponent,
     MapViewComponent,
-    LoadingComponent
+    LoadingComponent,
+    BootstrapToastContainerComponent
   ],
   imports: [
     BrowserModule,

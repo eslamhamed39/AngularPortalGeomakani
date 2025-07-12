@@ -10,7 +10,7 @@
         <label for="password">Password</label>
         <input type="password" placeholder="password" id="password" name="password" required [(ngModel)]="password" />
         <div class="Message">
-          <h5 class="status" *ngIf="errorMessage">{{ errorMessage }}</h5>
+          <!-- Error messages are now handled by Bootstrap toast notifications -->
         </div>
         <div class="btn_1">
           <button class="btn_login1" id="login" type="submit">Login</button>
