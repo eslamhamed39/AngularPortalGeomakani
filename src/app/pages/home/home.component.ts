@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { MapControlService } from '../../services/map-control.service';
 import { AuthService } from '../../services/auth.service';
 import { LoadingComponent } from '../../loading/loading.component';
+import { LayerInfo } from '../../components/file-upload/file-upload.component';
+import { MapViewComponent } from '../../components/map-view/map-view.component';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +17,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('scroller', { static: false }) scroller!: ElementRef;
   @ViewChild('after', { static: false }) after!: ElementRef;
   @ViewChild('loadingComponent', { static: false }) loadingComponent!: LoadingComponent;
+  @ViewChild('mapView', { static: false }) mapView!: MapViewComponent;
 
   showProfileMenu = false;
   showDetectionMenu = false;
@@ -33,6 +36,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Layer configuration loaded from JSON file
   layersConfig: Record<string, any> = {};
   currentLayerConfig: any = null;
+
+  // Variables for uploaded layers
+  uploadedLayers: LayerInfo[] = [];
+  showFileUpload = false;
 
   constructor(
     private mapControl: MapControlService,
@@ -63,7 +70,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // سيتم استدعاء initSlider عند فتح الـ popup
+    // initSlider will be called when popup opens
     // Add window resize listener for responsive slider
     window.addEventListener('resize', () => {
       if (this.popupData) {
@@ -123,6 +130,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // Toggle file upload component display
+  toggleFileUpload() {
+    this.showFileUpload = !this.showFileUpload;
+    if (this.showFileUpload) {
+      this.showDetectionMenu = false;
+      this.showProfileMenu = false;
+      this.activeSidebarIndex = 4; // New number for file upload
+    } else {
+      this.activeSidebarIndex = 1;
+    }
+  }
+
   setActiveSidebar(idx: number) {
     // Close date selectors when clicking on sidebar
     this.showLeftDates = false;
@@ -139,12 +158,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.lastClickedSidebarIndex = 2;
         this.showDetectionMenu = true;
         this.showProfileMenu = false;
+        this.showFileUpload = false;
       }
+    } else if (idx === 4) {
+      this.toggleFileUpload();
     } else if (idx === 1) {
       this.activeSidebarIndex = 1;
       this.lastClickedSidebarIndex = 1;
       this.showDetectionMenu = false;
       this.showProfileMenu = false;
+      this.showFileUpload = false;
       this.closeSubmenu();
       this.mapControl.resetMapToDefault();
     } else {
@@ -152,7 +175,37 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.lastClickedSidebarIndex = idx;
       this.showDetectionMenu = false;
       this.showProfileMenu = false;
+      this.showFileUpload = false;
       this.closeSubmenu();
+    }
+  }
+
+  // Handle adding new layer
+  onLayerAdded(layer: LayerInfo) {
+    // Create new array to ensure ngOnChanges is triggered in map component
+    this.uploadedLayers = [...this.uploadedLayers, layer];
+    
+    // Zoom to new layer with short delay to ensure layer is added first
+    setTimeout(() => {
+      this.zoomToLayer(layer);
+    }, 500);
+  }
+
+  // Handle layer removal
+  onLayerRemoved(layerId: string) {
+    // Create new array to ensure ngOnChanges is triggered in map component
+    this.uploadedLayers = this.uploadedLayers.filter(layer => layer.id !== layerId);
+  }
+
+  // Handle zoom request for layer
+  onLayerZoomRequested(layer: LayerInfo) {
+    this.zoomToLayer(layer);
+  }
+
+  // Zoom to layer
+  private zoomToLayer(layer: LayerInfo) {
+    if (this.mapView) {
+      this.mapView.zoomToUploadedLayer(layer);
     }
   }
 
@@ -162,8 +215,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showRightDates = false;
     
     this.mapControl.showLayer(layerName);
-    this.closeSubmenu(); // لإغلاق القوائم المنبثقة بعد الضغط (اختياري)
-    this.hideDetectionMenu(); // إخفاء القائمة الرئيسية بعد اختيار عنصر
+    this.closeSubmenu(); // To close popup menus after clicking (optional)
+    this.hideDetectionMenu(); // Hide main menu after selecting an item
   }
 
   hideDetectionMenu() {

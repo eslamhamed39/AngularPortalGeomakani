@@ -1,0 +1,105 @@
+<div class="file-upload-container">
+  <div class="upload-section">
+    <div class="upload-header">
+      <h5>
+        <i class="bi bi-cloud-upload"></i>
+        Upload Geographic Files
+      </h5>
+      <p class="text-muted">Supports Shapefile (.shp, .dbf) and KML (.kml, .kmz) files</p>
+    </div>
+
+    <div class="upload-area" 
+         (click)="fileInput.click()"
+         (dragover)="$event.preventDefault(); isDragover = true"
+         (dragleave)="isDragover = false"
+         (drop)="onFileDrop($event)"
+         [class.dragover]="isDragover">
+      <div class="upload-content">
+        <i class="bi bi-file-earmark-arrow-up upload-icon"></i>
+        <p>Drag files here or click to select</p>
+        <small class="text-muted">Supported files: {{ supportedFormats }}</small>
+      </div>
+      <input #fileInput 
+             type="file" 
+             [accept]="supportedFormats"
+             (change)="onFileSelected($event)"
+             multiple
+             style="display: none;">
+    </div>
+
+    <div *ngIf="isUploading" class="upload-progress">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Uploading...</span>
+      </div>
+      <span class="ms-2">Processing file...</span>
+    </div>
+  </div>
+
+  <div class="layers-section" *ngIf="uploadedLayers.length > 0">
+    <h6 class="layers-header">
+      <i class="bi bi-layers"></i>
+      Uploaded Layers ({{ uploadedLayers.length }})
+    </h6>
+    
+    <div class="layers-list">
+      <div *ngFor="let layer of uploadedLayers" class="layer-item">
+        <div class="layer-header">
+          <div class="layer-info">
+            <div class="layer-color" [style.background-color]="layer.color"></div>
+            <div class="layer-details">
+              <h6 class="layer-name">{{ layer.name }}</h6>
+              <small class="layer-type">{{ layer.type === 'shapefile' ? 'Shapefile' : 'KML' }}</small>
+            </div>
+          </div>
+          <div class="layer-actions">
+            <button class="btn btn-sm btn-outline-primary" 
+                    (click)="zoomToLayer(layer)"
+                    title="Zoom to Layer">
+              <i class="bi bi-zoom-in"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" 
+                    (click)="removeLayer(layer.id)"
+                    title="Remove Layer">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="layer-stats">
+          <div class="stat-item">
+            <span class="stat-label">Area:</span>
+            <span class="stat-value">
+              {{ formatArea(layer.area, layer.areaUnit || 'km') }}
+              <div class="unit-toggle">
+                <button class="btn btn-sm btn-link" 
+                        (click)="toggleAreaUnit(layer.id, 'km')">km²</button>
+                <button class="btn btn-sm btn-link" 
+                        (click)="toggleAreaUnit(layer.id, 'm')">m²</button>
+                <button class="btn btn-sm btn-link" 
+                        (click)="toggleAreaUnit(layer.id, 'ha')">ha</button>
+              </div>
+            </span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Perimeter:</span>
+            <span class="stat-value">
+              {{ formatPerimeter(layer.perimeter, layer.perimeterUnit || 'km') }}
+              <div class="unit-toggle">
+                <button class="btn btn-sm btn-link" 
+                        (click)="togglePerimeterUnit(layer.id, 'km')">km</button>
+                <button class="btn btn-sm btn-link" 
+                        (click)="togglePerimeterUnit(layer.id, 'm')">m</button>
+              </div>
+            </span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Coordinate Center:</span>
+            <span class="stat-value">
+              {{ layer.center[0].toFixed(6) }}, {{ layer.center[1].toFixed(6) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

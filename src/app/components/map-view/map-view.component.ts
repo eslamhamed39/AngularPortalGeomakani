@@ -1,8 +1,9 @@
 import { MapControlService } from '../../services/map-control.service';
 import { Subscription } from 'rxjs';
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as tt from '@tomtom-international/web-sdk-maps';
 import { HttpClient } from '@angular/common/http';
+import { LayerInfo } from '../file-upload/file-upload.component';
 // import ttNavigationControl from '@tomtom-international/web-sdk-maps/plugins/navigation-control/navigation-control';
 
 @Component({
@@ -10,35 +11,86 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './map-view.component.html',
   styleUrls: ['./map-view.component.scss']
 })
-export class MapViewComponent implements AfterViewInit, OnDestroy {
+export class MapViewComponent implements AfterViewInit, OnDestroy, OnChanges {
   @ViewChild('ttmap', { static: true }) mapDiv!: ElementRef<HTMLDivElement>;
   @Output() polygonSelected = new EventEmitter<{ layer: string }>();
   @Output() mapLoaded = new EventEmitter<void>();
+  @Input() uploadedLayers: LayerInfo[] = [];
+  
   private mapSub!: Subscription;
   private map: tt.Map | undefined;
-  private TT_API_KEY = 'YZlbkr2ee2sbGy3dZsWG85VE4mPsibyQ'; // غيّر بمفتاحك إن أردت
-  // private TT_API_KEY = ''; // غيّر بمفتاحك إن أردت
+  private TT_API_KEY = 'YZlbkr2ee2sbGy3dZsWG85VE4mPsibyQ'; // Change with your key if needed
+  // private TT_API_KEY = ''; // Change with your key if needed
 
   private defaultCenter: [number, number] = [21.667170602629522, 4.012114320491342];
   private defaultZoom = 2.2;
   private mapIsLoaded: boolean = false;
 
-  // متغيرات لتخزين البيانات من ملفات JSON
+  // Settings for centering uploaded layers
+  private centerOffset = {
+    longitude: -0.05, // Move center east (right) - positive value for east, negative for west
+    latitude: 0       // Move center north (up) - positive value for north, negative for south
+  };
+
+  // Variables to store data from JSON files
   private layerID_use: string[] = [];
   private flyToConfig: Record<string, { center: [number, number], zoom: number, pitch: number }> = {};
   private popupLayers: string[] = [];
   private hoverLayers: string[] = [];
 
+  // Variables for uploaded layers
+  private uploadedLayerSources: Map<string, any> = new Map();
+  private popup: tt.Popup | undefined;
+  private previousUploadedLayers: LayerInfo[] = [];
+  
+  // Add queue for pending layers
+  private pendingLayers: LayerInfo[] = [];
+
   constructor(private http: HttpClient , private mapControl: MapControlService) { }
 
   ngAfterViewInit(): void {
-    // تحميل البيانات من ملفات JSON أولاً
+    // Load data from JSON files first
     this.loadConfigurationData().then(() => {
       this.initializeMap();
     });
   }
 
-  // تحميل البيانات من ملفات JSON
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['uploadedLayers']) {
+      if (this.map && this.mapIsLoaded) {
+        this.handleUploadedLayersChange();
+      } else if (this.uploadedLayers.length > 0) {
+        // If map is not loaded yet, add layers to pending queue
+        this.uploadedLayers.forEach(layer => {
+          const existingPendingLayer = this.pendingLayers.find(l => l.id === layer.id);
+          if (!existingPendingLayer) {
+            this.pendingLayers.push(layer);
+          }
+        });
+      }
+    }
+  }
+
+  // Handle changes in uploaded layers
+  private handleUploadedLayersChange(): void {
+    // Remove layers that no longer exist
+    this.previousUploadedLayers.forEach(layer => {
+      if (!this.uploadedLayers.find(l => l.id === layer.id)) {
+        this.removeUploadedLayer(layer.id);
+      }
+    });
+
+    // Add new layers
+    this.uploadedLayers.forEach(layer => {
+      if (!this.previousUploadedLayers.find(l => l.id === layer.id)) {
+        this.addUploadedLayer(layer);
+      }
+    });
+
+    this.previousUploadedLayers = [...this.uploadedLayers];
+  }
+
+  // Load data from JSON files
   private async loadConfigurationData(): Promise<void> {
     try {
       const [supportedLayers, flyToConfig, popupLayers, hoverLayers] = await Promise.all([
@@ -54,12 +106,12 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       this.hoverLayers = hoverLayers || [];
     } catch (error) {
       console.error('Error loading configuration data:', error);
-      // استخدام البيانات الافتراضية في حالة الخطأ
+      // Use default data in case of error
       this.loadDefaultConfiguration();
     }
   }
 
-  // تحميل البيانات الافتراضية في حالة فشل تحميل ملفات JSON
+  // Load default data in case of JSON file loading failure
   private loadDefaultConfiguration(): void {
     this.layerID_use = [
       "Project", "Project_outline", "Forest_Logging_Detection", "Forest_Logging_Detection_outline",
@@ -132,9 +184,9 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     ];
   }
 
-  // إعداد الخريطة
+  // Initialize map
   private initializeMap(): void {
-    // إعداد الخريطة TomTom
+    // Setup TomTom map
     const viewport_height = window.innerHeight;
     const zoom = viewport_height < 620 ? 1.6 : this.defaultZoom;
 
@@ -143,15 +195,23 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       container: this.mapDiv.nativeElement,
       center: this.defaultCenter,
       zoom: zoom,
-      // style: 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAVVRVTzI1SHRBR3MxQXRBaDtiYWI4ZjY0Yi1lZDkwLTRjYTEtYTlkYy1mYjcxODIyNzdlMzA=/drafts/0.json'
+      style: 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAVVRVTzI1SHRBR3MxQXRBaDtiYWI4ZjY0Yi1lZDkwLTRjYTEtYTlkYy1mYjcxODIyNzdlMzA=/drafts/0.json'
     });
 
-    // أدوات التحكم
+    // Controls
     this.map.addControl(new tt.NavigationControl());
 
-    // استمع لأمر إعادة الخريطة للوضع الافتراضي
+    // Create popup
+    this.popup = new tt.Popup({
+      closeButton: true,
+      closeOnClick: false,
+      maxWidth: '300px'
+    });
+
+    // Listen for map reset command
     this.mapControl.resetMap$.subscribe(() => {
       this.removeAllSourceLayers();
+      this.removeUploadedLayers();
       this.map!.flyTo({
         center: this.defaultCenter,
         zoom: this.defaultZoom,
@@ -161,9 +221,9 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
 
     this.mapSub = this.mapControl.layer$.subscribe(layerName => {
-      // عند استقبال طلب جديد من السايدبار
+      // When receiving a new request from sidebar
       this.showGeoJsonLayer(layerName);
-      // يمكنك أيضا تطبيق flyTo تلقائياً:
+      // You can also apply flyTo automatically:
       if (this.flyToConfig[layerName]) {
         const conf = this.flyToConfig[layerName];
         this.map!.flyTo({
@@ -176,13 +236,13 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
     
 
-    // جعل المؤشر pointer عند المرور على طبقة
+    // Set pointer cursor when hovering over layer
     this.layerID_use.forEach(layerId => this.setCursor(layerId));
 
-    // إضافة Hover effect (ألوان) على الطبقات
+    // Add Hover effect (colors) on layers
     this.hoverLayers.forEach(layerId => this.addHoverEffect(layerId));
 
-    // إضافة أحداث الفلاي تو لكل طبقة
+    // Add flyTo events for each layer
     Object.entries(this.flyToConfig).forEach(([id, conf]) => {
       this.map!.on('click', id, () => {
         this.map!.flyTo({
@@ -194,18 +254,31 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       });
     });
 
-    // إضافة أحداث النقر للطبقات مع popup
+    // Add click events for layers with popup
     this.popupLayers.forEach((layerName: string) => {
       this.map!.on('click', layerName, (e: any) => {
         this.polygonSelected.emit({ layer: layerName });
       });
     });
 
-    // عند تحميل الخريطة أضف أي إعدادات إضافية:
+    // When map loads, add any additional settings:
     this.map.on('load', () => {
       this.mapIsLoaded = true;
       this.mapLoaded.emit();
-      // مثال: تحميل طبقة مبدئية
+      
+      // Add existing uploaded layers
+      this.uploadedLayers.forEach(layer => {
+        this.addUploadedLayerToMap(layer);
+      });
+      
+      // Add any pending layers
+      this.pendingLayers.forEach(layer => {
+        this.addUploadedLayerToMap(layer);
+      });
+      this.pendingLayers = [];
+      
+      this.previousUploadedLayers = [...this.uploadedLayers];
+      // Example: load initial layer
       // this.showGeoJsonLayer('Project');
     });
   }
@@ -215,10 +288,11 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     if (this.mapSub) this.mapSub.unsubscribe();
   }
 
-  // تحميل طبقة GeoJSON من مجلد assets/Layer/
+  // Load GeoJSON layer from assets/Layer/ folder
   showGeoJsonLayer(layerID: string): void {
     if (!this.map || !this.mapIsLoaded) return;
     this.removeAllSourceLayers();
+    this.removeUploadedLayers();
     Promise.all([
       this.http.get(`assets/Layer/${layerID}.json`).toPromise(),
       this.http.get(`assets/Layer/${layerID}_outline.json`).toPromise()
@@ -228,7 +302,333 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  // إزالة جميع الطبقات المخصصة من الخريطة
+  // Add uploaded layer to map
+  addUploadedLayer(layer: LayerInfo): void {
+    if (!this.map || !this.mapIsLoaded) {
+      // Add layer to pending queue if map is not loaded yet
+      const existingPendingLayer = this.pendingLayers.find(l => l.id === layer.id);
+      if (!existingPendingLayer) {
+        this.pendingLayers.push(layer);
+      }
+      return;
+    }
+
+    this.addUploadedLayerToMap(layer);
+  }
+
+  // Actually add uploaded layer to map
+  private addUploadedLayerToMap(layer: LayerInfo): void {
+    if (!this.map || !this.mapIsLoaded) {
+      return;
+    }
+    
+    const fillLayerId = layer.id;
+    const outlineLayerId = `${layer.id}_outline`;
+
+    // Check if layer already exists
+    if (this.uploadedLayerSources.has(layer.id)) {
+      return;
+    }
+
+    try {
+      // 1. Add the GeoJSON source (if not already added)
+      if (this.map.getSource(fillLayerId)) {
+        this.map.removeSource(fillLayerId);
+      }
+      
+      this.map.addSource(fillLayerId, {
+        type: 'geojson',
+        data: layer.geojson
+      });
+
+      // 2. Add the fill layer
+      this.map.addLayer({
+        id: fillLayerId,
+        type: 'fill',
+        source: fillLayerId,
+        layout: {},
+        paint: {
+          'fill-color': layer.color,
+          'fill-opacity': 0.4,
+          'fill-outline-color': 'white'
+        }
+      });
+
+      // 3. Add the outline layer
+      this.map.addLayer({
+        id: outlineLayerId,
+        type: 'line',
+        source: fillLayerId,
+        layout: {},
+        paint: {
+          'line-color': '#fff',
+          'line-width': 3
+        }
+      });
+
+      // Add to supported/interactive lists
+      this.layerID_use.push(fillLayerId, outlineLayerId);
+      this.popupLayers.push(fillLayerId);
+      this.hoverLayers.push(fillLayerId);
+
+      // Add flyTo config
+      const bounds = this.calculateBounds(layer.geojson);
+      const center: [number, number] = [
+        (bounds[0][0] + bounds[1][0]) / 2 + this.centerOffset.longitude,
+        (bounds[0][1] + bounds[1][1]) / 2 + this.centerOffset.latitude
+      ];
+      this.flyToConfig[fillLayerId] = {
+        center: center,
+        zoom: this.calculateOptimalZoom(layer.geojson), // Use the configurable default zoom
+        pitch: 45
+      };
+
+      // Add interactions
+      this.addUploadedLayerInteractions(layer, fillLayerId, outlineLayerId);
+
+      // Save refs
+      this.uploadedLayerSources.set(layer.id, { fillLayerId, outlineLayerId });
+    } catch (error) {
+      console.error('Error adding layer to map:', error, layer.name);
+    }
+  }
+
+  // Add interactions for uploaded layer
+  private addUploadedLayerInteractions(layer: LayerInfo, fillLayerId: string, outlineLayerId: string): void {
+    if (!this.map) return;
+
+    // Hover effect on fill layer
+    this.map.on('mouseenter', fillLayerId, () => {
+      this.map!.getCanvas().style.cursor = 'pointer';
+      this.map!.setPaintProperty(fillLayerId, 'fill-opacity', 0.6);
+      this.map!.setPaintProperty(outlineLayerId, 'line-width', 4);
+    });
+
+    this.map.on('mouseleave', fillLayerId, () => {
+      this.map!.getCanvas().style.cursor = '';
+      this.map!.setPaintProperty(fillLayerId, 'fill-opacity', 0.4);
+      this.map!.setPaintProperty(outlineLayerId, 'line-width', 3);
+    });
+
+    // Hover effect on outline layer
+    this.map.on('mouseenter', outlineLayerId, () => {
+      this.map!.getCanvas().style.cursor = 'pointer';
+      this.map!.setPaintProperty(fillLayerId, 'fill-opacity', 0.6);
+      this.map!.setPaintProperty(outlineLayerId, 'line-width', 4);
+    });
+
+    this.map.on('mouseleave', outlineLayerId, () => {
+      this.map!.getCanvas().style.cursor = '';
+      this.map!.setPaintProperty(fillLayerId, 'fill-opacity', 0.4);
+      this.map!.setPaintProperty(outlineLayerId, 'line-width', 3);
+    });
+
+    // Click event to show popup (on both layers)
+    [fillLayerId, outlineLayerId].forEach(layerId => {
+      this.map!.on('click', layerId, (e: any) => {
+        const coordinates = e.lngLat;
+        const popupContent = this.createPopupContent(layer);
+        
+        this.popup!.setLngLat(coordinates)
+          .setHTML(popupContent)
+          .addTo(this.map!);
+      });
+    });
+  }
+
+  // Create popup content
+  private createPopupContent(layer: LayerInfo): string {
+    const formatArea = (area: number, unit: 'km' | 'm' | 'ha' = 'km'): string => {
+      switch (unit) {
+        case 'km': return `${area.toFixed(2)} km²`;
+        case 'm': return `${(area * 1000000).toFixed(2)} m²`;
+        case 'ha': return `${(area * 100).toFixed(2)} ha`;
+        default: return `${area.toFixed(2)} km²`;
+      }
+    };
+
+    const formatPerimeter = (perimeter: number, unit: 'km' | 'm' = 'km'): string => {
+      switch (unit) {
+        case 'km': return `${perimeter.toFixed(2)} km`;
+        case 'm': return `${(perimeter * 1000).toFixed(2)} m`;
+        default: return `${perimeter.toFixed(2)} km`;
+      }
+    };
+
+    return `
+      <div class="uploaded-layer-popup">
+        <h6 style="color: ${layer.color}; margin-bottom: 12px;">
+          <i class="bi bi-geo-alt"></i>
+          ${layer.name}
+        </h6>
+        <div class="popup-stats">
+          <div class="stat-row">
+            <span class="stat-label">Area:</span>
+            <span class="stat-value">${formatArea(layer.area, layer.areaUnit)}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Perimeter:</span>
+            <span class="stat-value">${formatPerimeter(layer.perimeter, layer.perimeterUnit)}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Center:</span>
+            <span class="stat-value">${layer.center[0].toFixed(6)}, ${layer.center[1].toFixed(6)}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Type:</span>
+            <span class="stat-value">${layer.type === 'shapefile' ? 'Shapefile' : 'KML'}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Zoom to uploaded layer
+  zoomToUploadedLayer(layer: LayerInfo): void {
+    if (!this.map) return;
+
+    // Look for flyTo settings for the layer
+    const layerFlyToConfig = this.flyToConfig[layer.id];
+    
+    if (layerFlyToConfig) {
+      // Use saved flyTo settings
+      this.map.flyTo({
+        center: layerFlyToConfig.center,
+        zoom: layerFlyToConfig.zoom,
+        pitch: layerFlyToConfig.pitch,
+        duration: 2000
+      } as any);
+    } else {
+      // If no saved settings, calculate center and use default zoom
+      const bounds = this.calculateBounds(layer.geojson);
+      const center: [number, number] = [
+        (bounds[0][0] + bounds[1][0]) / 2 + this.centerOffset.longitude,
+        (bounds[0][1] + bounds[1][1]) / 2 + this.centerOffset.latitude
+      ];
+      
+      this.map.flyTo({
+        center: center,
+        zoom: this.calculateOptimalZoom(layer.geojson), // Use the configurable default zoom
+        pitch: 45,
+        duration: 2000
+      } as any);
+    }
+  }
+
+  // Calculate layer bounds
+  private calculateBounds(geojson: any): [[number, number], [number, number]] {
+    let minLng = Infinity, maxLng = -Infinity;
+    let minLat = Infinity, maxLat = -Infinity;
+
+    const processCoordinates = (coordinates: number[]): void => {
+      if (coordinates.length >= 2) {
+        const [lng, lat] = coordinates;
+        minLng = Math.min(minLng, lng);
+        maxLng = Math.max(maxLng, lng);
+        minLat = Math.min(minLat, lat);
+        maxLat = Math.max(maxLat, lat);
+      }
+    };
+
+    const processGeometry = (geometry: any): void => {
+      switch (geometry.type) {
+        case 'Point':
+          processCoordinates(geometry.coordinates);
+          break;
+        case 'LineString':
+          geometry.coordinates.forEach((coord: number[]) => processCoordinates(coord));
+          break;
+        case 'Polygon':
+          geometry.coordinates.forEach((ring: number[][]) => {
+            ring.forEach((coord: number[]) => processCoordinates(coord));
+          });
+          break;
+        case 'MultiPoint':
+          geometry.coordinates.forEach((coord: number[]) => processCoordinates(coord));
+          break;
+        case 'MultiLineString':
+          geometry.coordinates.forEach((line: number[][]) => {
+            line.forEach((coord: number[]) => processCoordinates(coord));
+          });
+          break;
+        case 'MultiPolygon':
+          geometry.coordinates.forEach((polygon: number[][][]) => {
+            polygon.forEach((ring: number[][]) => {
+              ring.forEach((coord: number[]) => processCoordinates(coord));
+            });
+          });
+          break;
+        default:
+          console.warn('Unknown geometry type:', geometry.type);
+      }
+    };
+
+    if (geojson.features && Array.isArray(geojson.features)) {
+      geojson.features.forEach((feature: any) => {
+        if (feature.geometry) {
+          processGeometry(feature.geometry);
+        }
+      });
+    }
+
+    // Validate results
+    if (minLng === Infinity || maxLng === -Infinity || minLat === Infinity || maxLat === -Infinity) {
+      console.error('Invalid bounds calculated:', { minLng, maxLng, minLat, maxLat });
+      // Return small default bounds
+      return [[0, 0], [0.01, 0.01]];
+    }
+
+    return [[minLng, minLat], [maxLng, maxLat]];
+  }
+
+  // Remove uploaded layer
+  removeUploadedLayer(layerId: string): void {
+    if (!this.map) return;
+
+    // Remove from pending queue if found
+    this.pendingLayers = this.pendingLayers.filter(layer => layer.id !== layerId);
+
+    const layerRefs = this.uploadedLayerSources.get(layerId);
+    if (layerRefs) {
+      const { fillLayerId, outlineLayerId } = layerRefs;
+
+      try {
+        // Check if layer exists before removing
+        if (this.map.getLayer(fillLayerId)) {
+          this.map.removeLayer(fillLayerId);
+        }
+        if (this.map.getLayer(outlineLayerId)) {
+          this.map.removeLayer(outlineLayerId);
+        }
+        
+        // Remove source if it exists
+        if (this.map.getSource(fillLayerId)) {
+          this.map.removeSource(fillLayerId);
+        }
+        
+        // Remove layers from supported lists
+        this.layerID_use = this.layerID_use.filter(id => id !== fillLayerId && id !== outlineLayerId);
+        this.popupLayers = this.popupLayers.filter(id => id !== fillLayerId);
+        this.hoverLayers = this.hoverLayers.filter(id => id !== fillLayerId);
+        
+        // Remove flyTo settings
+        delete this.flyToConfig[fillLayerId];
+        
+        this.uploadedLayerSources.delete(layerId);
+      } catch (error) {
+        console.error('Error removing uploaded layer:', error);
+      }
+    }
+  }
+
+  // Remove all uploaded layers
+  removeUploadedLayers(): void {
+    this.uploadedLayers.forEach(layer => {
+      this.removeUploadedLayer(layer.id);
+    });
+  }
+
+  // Remove all custom layers from map
   removeAllSourceLayers(): void {
     if (!this.map || !this.mapIsLoaded) return;
     const style = this.map.getStyle();
@@ -244,7 +644,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  // مؤشر الماوس pointer عند المرور على الطبقة
+  // Set mouse cursor to pointer when hovering over layer
   setCursor(layerId: string): void {
     if (!this.map) return;
     this.map.on('mouseenter', layerId, () => {
@@ -255,7 +655,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  // تأثير hover (تغيير الألوان) على الطبقة
+  // Hover effect (color change) on layer
   addHoverEffect(layerId: string): void {
     if (!this.map) return;
     this.map.on('mouseenter', layerId, () => {
@@ -272,6 +672,98 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  // لإظهار طبقة جديدة عند اختيار من القائمة الجانبية، نادِ:
-  // this.showGeoJsonLayer('اسم_الطبقة');
+  // To show a new layer when selected from sidebar, call:
+  // this.showGeoJsonLayer('layer_name');
+
+  private getDarkerColor(color: string): string {
+    // If color is not in hex format, return black
+    if (!color.startsWith('#')) {
+      return '#000000';
+    }
+
+    const hex = color.replace('#', '');
+    
+    // If color is short (3 characters), expand it
+    if (hex.length === 3) {
+      const expanded = hex.split('').map(char => char + char).join('');
+      return this.getDarkerColor('#' + expanded);
+    }
+    
+    // If color is not 6 characters, return black
+    if (hex.length !== 6) {
+      return '#000000';
+    }
+
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    // Make color darker by 40%
+    const darkerR = Math.max(0, Math.floor(r * 0.6));
+    const darkerG = Math.max(0, Math.floor(g * 0.6));
+    const darkerB = Math.max(0, Math.floor(b * 0.6));
+
+    return `#${darkerR.toString(16).padStart(2, '0')}${darkerG.toString(16).padStart(2, '0')}${darkerB.toString(16).padStart(2, '0')}`;
+  }
+
+  // Calculate optimal zoom level based on layer size
+  private calculateOptimalZoom(geojson: any): number {
+    const bounds = this.calculateBounds(geojson);
+    
+    // Calculate layer dimensions
+    const latDiff = bounds[1][1] - bounds[0][1]; // Latitude difference
+    const lngDiff = bounds[1][0] - bounds[0][0]; // Longitude difference
+    
+    // Log detailed information for diagnosis
+    console.log('Layer bounds:', bounds);
+    console.log('Lat difference:', latDiff);
+    console.log('Lng difference:', lngDiff);
+    
+    // Calculate largest dimension (length or width)
+    const maxDimension = Math.max(latDiff, lngDiff);
+    console.log('Max dimension:', maxDimension);
+    
+    // Calculate zoom based on largest dimension
+    let zoom: number;
+    
+    if (maxDimension >= 20) {
+      // Very large layer (continent or large country)
+      zoom = 3;
+    } else if (maxDimension >= 10) {
+      // Large layer (medium country)
+      zoom = 4;
+    } else if (maxDimension >= 5) {
+      // Medium-large layer (region or province)
+      zoom = 5;
+    } else if (maxDimension >= 2) {
+      // Medium layer (large city)
+      zoom = 6;
+    } else if (maxDimension >= 1) {
+      // Small layer (small city)
+      zoom = 7;
+    } else if (maxDimension >= 0.5) {
+      // Very small layer (neighborhood)
+      zoom = 9.5;
+    } else if (maxDimension >= 0.1) {
+      // Precise layer (small area)
+      zoom = 12;
+    } else if (maxDimension >= 0.05) {
+      // Very precise layer (complex or large building)
+      zoom = 13;
+    } else if (maxDimension >= 0.01) {
+      // Very small layer (building or land plot)
+      zoom = 15;
+    } else {
+      // Extremely small layer (point or small object)
+      zoom = 17;
+    }
+    
+    console.log('Calculated zoom:', zoom);
+    
+    // Ensure zoom is within allowed limits
+    const finalZoom = Math.max(2, Math.min(20, zoom));
+    console.log('Final zoom:', finalZoom);
+    
+    return finalZoom;
+  }
 }

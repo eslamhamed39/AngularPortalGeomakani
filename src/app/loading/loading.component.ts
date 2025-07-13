@@ -12,7 +12,7 @@ export class LoadingComponent implements OnInit, OnDestroy {
   private timeoutId: any;
 
   ngOnInit() {
-    // إذا لم يتم تحميل الخريطة بعد، انتظر
+    // If map is not loaded yet, wait
     if (!this.mapLoaded) {
       this.show = true;
     }
@@ -25,7 +25,7 @@ export class LoadingComponent implements OnInit, OnDestroy {
   }
 
   onMapLoaded() {
-    // انتظر ثانيتين إضافيتين بعد تحميل الخريطة
+    // Wait two additional seconds after map loads
     this.timeoutId = setTimeout(() => {
       this.show = false;
     }, 2000);

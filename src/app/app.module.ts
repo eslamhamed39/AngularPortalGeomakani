@@ -10,6 +10,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MapViewComponent } from './components/map-view/map-view.component';
 import { LoadingComponent } from './loading/loading.component';
 import { BootstrapToastContainerComponent } from './components/bootstrap-toast-container/bootstrap-toast-container.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { BootstrapToastContainerComponent } from './components/bootstrap-toast-c
     HomeComponent,
     MapViewComponent,
     LoadingComponent,
-    BootstrapToastContainerComponent
+    BootstrapToastContainerComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,

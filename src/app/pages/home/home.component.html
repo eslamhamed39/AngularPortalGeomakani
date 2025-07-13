@@ -3,7 +3,7 @@
 <!-- &--------------------------------------Home Section--------------------------------------- -->
 <div class="w-100 vh-100 d-block" id="Home_section">
   <div class="home_content">
-    <!-- سايد بار -->
+    <!-- Sidebar -->
     <div class="bg-light sticky-top Side_bar">
       <img src="https://i.ibb.co/hxYrJLkJ/bitmap.webp" class="Side_v_logo" alt="v-Logo">
       <div class="d-flex flex-column flex-row flex-nowrap bg-light2 align-items-center white_bg">
@@ -21,14 +21,19 @@
               <div id="icon_land"></div>
             </a>
           </li>
-          <li class="li3">
+          <!-- <li class="li3">
             <a (click)="setActiveSidebar(3)" [ngClass]="{'active': activeSidebarIndex === 3}"
               class="nav-link nav-item py-3 px-2" title="Dashboard">
               <i class="bi-speedometer2 fs-3"></i>
             </a>
+          </li> -->
+          <li class="li4">
+            <a (click)="setActiveSidebar(4)" [ngClass]="{'active': activeSidebarIndex === 4}"
+              class="nav-link nav-item py-3 px-2" title="Upload Geographic Files">
+              <i class="bi bi-cloud-upload fs-3"></i>
+            </a>
           </li>
         </ul>
-
         <a class="py-2 px-2 mb-2 nav-link nav-item" id="dropdownUser3"
           (click)="toggleProfileMenu(); $event.stopPropagation()" [ngClass]="{'active': activeSidebarIndex === 99}">
           <i class="bi-person-circle"></i>
@@ -44,7 +49,7 @@
           </ul>
         </div>
       </div>
-      <!-- قائمة الخدمات الجانبية -->
+      <!-- Sidebar Services List -->
       <div class="list_detection" [ngStyle]="{display: showDetectionMenu ? 'block' : 'none'}"
         (click)="$event.stopPropagation()">
         <div class="list_Service_container">
@@ -185,16 +190,16 @@
             <div class="list_detection2" style="top:-250px; left: 100.2%;; min-width:295px;"
               [ngStyle]="{display: submenuOpen === 'palm' ? 'block' : 'none'}" (click)="$event.stopPropagation()">
               <ul class="d-flex flex-column align-items-center justify-content-center shadow">
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('1')">فيحان الحربي</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('2')">عبدالعزيز الخليفة</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('3')">عويد عطالله عواض المطيري</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('4')">مدوخ بن هلال بن منير المطيري</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('5')">ثامر خلف مشيعان العضيلة</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('6')">ملحق بن عاقل عواض المطيري</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('7')">تراحيب فيحان مصلح العضيلة</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('8')">منصور محمد بندر الحربي</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('9')">منزل نافل الخمشي</a></li>
-                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('10')">بندر الشملان</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('1')">Faihan Al-Harbi</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('2')">Abdulaziz Al-Khalifa</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('3')">Owaid Atallah Awadh Al-Mutairi</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('4')">Madawakh Bin Hilal Bin Munir Al-Mutairi</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('5')">Thamer Khalaf Mashian Al-Adhila</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('6')">Mulhaq Bin Aqil Awadh Al-Mutairi</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('7')">Tarahib Faihan Muslih Al-Adhila</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('8')">Mansour Mohammed Bander Al-Harbi</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('9')">Manzil Nafil Al-Khamshi</a></li>
+                <li><a class="dropdown-item1" (click)="onSidebarLayerClick('10')">Bander Al-Shamlan</a></li>
               </ul>
             </div>
           </div>
@@ -202,12 +207,25 @@
         </div>
       </div>
 
-
+      <!-- File Upload Component -->
+      <div class="file-upload-panel" [ngStyle]="{display: showFileUpload ? 'block' : 'none'}"
+        (click)="$event.stopPropagation()">
+        <app-file-upload 
+          (layerAdded)="onLayerAdded($event)"
+          (layerRemoved)="onLayerRemoved($event)"
+          (layerZoomRequested)="onLayerZoomRequested($event)">
+        </app-file-upload>
+      </div>
 
     </div>
-    <!-- الخريطة/المحتوى الرئيسي -->
+    <!-- Map/Main Content -->
     <div class="d-block justify-content-center align-items-center map vw-100 vh-100 overflow-hidden" id="map_section">
-      <app-map-view (polygonSelected)="onPolygonSelected($event)" (mapLoaded)="onMapLoaded()"></app-map-view>
+      <app-map-view 
+        #mapView
+        [uploadedLayers]="uploadedLayers"
+        (polygonSelected)="onPolygonSelected($event)" 
+        (mapLoaded)="onMapLoaded()">
+      </app-map-view>
     </div>
 
 

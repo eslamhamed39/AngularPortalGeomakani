@@ -20,3 +20,69 @@
 }
 
 .tt-attribution { display: none !important; }
+
+// أنماط البوب أب للطبقات المرفوعة
+.uploaded-layer-popup {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  text-align: right;
+  
+  h6 {
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    i {
+      font-size: 16px;
+    }
+  }
+  
+  .popup-stats {
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 4px 0;
+      border-bottom: 1px solid #f0f0f0;
+      
+      &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+      
+      .stat-label {
+        font-size: 12px;
+        color: #666;
+        font-weight: 500;
+      }
+      
+      .stat-value {
+        font-size: 13px;
+        color: #333;
+        font-weight: 600;
+        text-align: left;
+      }
+    }
+  }
+}
+
+// تخصيص أنماط TomTom Popup
+.tt-popup {
+  .tt-popup-content {
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .tt-popup-close-button {
+    color: #666;
+    font-size: 18px;
+    
+    &:hover {
+      color: #333;
+    }
+  }
+}
