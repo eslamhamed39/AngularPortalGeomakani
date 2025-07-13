@@ -112,6 +112,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
+    
+    // Hide popup when toggling profile menu
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+    
     if (this.showProfileMenu) {
       this.showDetectionMenu = false;
       this.activeSidebarIndex = 99;
@@ -122,6 +128,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleDetectionMenu() {
     this.showDetectionMenu = !this.showDetectionMenu;
+    
+    // Hide popup when toggling detection menu
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+    
     if (this.showDetectionMenu) {
       this.showProfileMenu = false;
       this.activeSidebarIndex = 2;
@@ -133,6 +145,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Toggle file upload component display
   toggleFileUpload() {
     this.showFileUpload = !this.showFileUpload;
+    
+    // Hide popup when toggling file upload
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+    
     if (this.showFileUpload) {
       this.showDetectionMenu = false;
       this.showProfileMenu = false;
@@ -146,6 +164,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     // Close date selectors when clicking on sidebar
     this.showLeftDates = false;
     this.showRightDates = false;
+    
+    // Hide popup when clicking on sidebar items
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
     
     if (idx === 2) {
       this.closePopup(); // Close dialog_detect when clicking Detection
@@ -218,6 +241,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     // Close date selectors when clicking on sidebar items
     this.showLeftDates = false;
     this.showRightDates = false;
+    
+    // Hide popup when clicking on sidebar layer items
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
     
     this.mapControl.showLayer(layerName);
     this.closeSubmenu(); // To close popup menus after clicking (optional)
@@ -544,13 +572,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const target = event.target as HTMLElement;
     
     // Hide file upload panel when clicking outside it (but not on sidebar)
-    const sidebarElement = document.querySelector('.Side_bar');
-    const fileUploadPanel = document.querySelector('.file-upload-panel');
+    // const sidebarElement = document.querySelector('.Side_bar');
+    // const fileUploadPanel = document.querySelector('.file-upload-panel');
     
-    if (fileUploadPanel && !fileUploadPanel.contains(target) && 
-        sidebarElement && !sidebarElement.contains(target)) {
-      this.hideFileUploadPanel();
-    }
+    // if (fileUploadPanel && !fileUploadPanel.contains(target) && 
+    //     sidebarElement && !sidebarElement.contains(target)) {
+    //   this.hideFileUploadPanel();
+    // }
     
     // Don't handle if polygon click is in progress
     if (this.isPolygonClickInProgress) {
@@ -653,6 +681,22 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }
+    
+    // Hide map popup when clicking outside map and sidebar areas
+    const mapElement = document.getElementById('map_section');
+    const sidebarElement = document.querySelector('.Side_bar');
+    const fileUploadPanel = document.querySelector('.file-upload-panel');
+    
+    if (mapElement && sidebarElement && this.mapView) {
+      // Check if click is outside map, sidebar, and file upload panel
+      const isOutsideMap = !mapElement.contains(target);
+      const isOutsideSidebar = !sidebarElement.contains(target);
+      const isOutsideFileUpload = !fileUploadPanel || !fileUploadPanel.contains(target);
+      
+      if (isOutsideMap && isOutsideSidebar && isOutsideFileUpload) {
+        this.mapView.closePopup();
+      }
+    }
   }
 
   // Handle map clicks separately to allow polygon clicks while closing dialog on map background
@@ -662,10 +706,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const mapElement = document.getElementById('map_section');
     const dialogElement = document.getElementById('dialog_detect');
     
-    // Hide file upload panel when clicking on map
-    if (mapElement && mapElement.contains(target)) {
-      this.hideFileUploadPanel();
-    }
+    // Check if click is on an uploaded layer
+    const isOnUploadedLayer = target.closest('[id*="uploaded_"]') || 
+                             target.closest('[id*="_outline"]') ||
+                             target.closest('.uploaded-layer-popup');
+    
+    // Hide file upload panel when clicking on map (but not on uploaded layers)
+    // if (mapElement && mapElement.contains(target) && !isOnUploadedLayer) {
+    //   this.hideFileUploadPanel();
+    // }
     
     // Don't handle if polygon click is in progress
     if (this.isPolygonClickInProgress) {

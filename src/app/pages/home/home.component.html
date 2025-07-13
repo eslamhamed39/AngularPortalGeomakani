@@ -211,6 +211,7 @@
       <div class="file-upload-panel" [ngStyle]="{display: showFileUpload ? 'block' : 'none'}"
         (click)="$event.stopPropagation()">
         <app-file-upload 
+          [mapView]="mapView"
           (layerAdded)="onLayerAdded($event)"
           (layerRemoved)="onLayerRemoved($event)"
           (layerZoomRequested)="onLayerZoomRequested($event)">

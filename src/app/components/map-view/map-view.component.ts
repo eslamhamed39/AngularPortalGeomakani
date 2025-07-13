@@ -208,10 +208,38 @@ export class MapViewComponent implements AfterViewInit, OnDestroy, OnChanges {
       maxWidth: '300px'
     });
 
+    // Add click event to hide popup when clicking anywhere on the map
+    this.map.on('click', (e: any) => {
+      // Check if click is on a layer or popup
+      const target = e.originalEvent.target;
+      
+      // Check if click is on popup elements
+      const isOnPopup = target.closest('.mapboxgl-popup') ||
+                       target.closest('.mapboxgl-popup-content') ||
+                       target.closest('.mapboxgl-popup-close-button');
+      
+      // Check if click is on map controls
+      const isOnControls = target.closest('.mapboxgl-ctrl') ||
+                          target.closest('.mapboxgl-ctrl-group') ||
+                          target.closest('.mapboxgl-marker');
+      
+      // Check if click is on any layer (SVG elements)
+      const isOnLayer = target.closest('path') || 
+                       target.closest('polygon') || 
+                       target.closest('svg') ||
+                       target.closest('.mapboxgl-interactive');
+      
+      // Only hide popup if clicking on empty map background (not on popup, controls, or layers)
+      if (!isOnPopup && !isOnControls && !isOnLayer) {
+        this.hidePopup();
+      }
+    });
+
     // Listen for map reset command
     this.mapControl.resetMap$.subscribe(() => {
       this.removeAllSourceLayers();
       this.removeUploadedLayers();
+      this.hidePopup(); // Hide popup when resetting map
       this.map!.flyTo({
         center: this.defaultCenter,
         zoom: this.defaultZoom,
@@ -222,6 +250,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     this.mapSub = this.mapControl.layer$.subscribe(layerName => {
       // When receiving a new request from sidebar
+      this.hidePopup(); // Hide popup when switching layers
       this.showGeoJsonLayer(layerName);
       // You can also apply flyTo automatically:
       if (this.flyToConfig[layerName]) {
@@ -245,6 +274,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     // Add flyTo events for each layer
     Object.entries(this.flyToConfig).forEach(([id, conf]) => {
       this.map!.on('click', id, () => {
+        this.hidePopup(); // Hide popup when clicking on layers for flyTo
         this.map!.flyTo({
           center: conf.center,
           zoom: conf.zoom,
@@ -426,6 +456,9 @@ export class MapViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     // Click event to show popup (on both layers)
     [fillLayerId, outlineLayerId].forEach(layerId => {
       this.map!.on('click', layerId, (e: any) => {
+        // Stop event propagation to prevent map click from hiding popup immediately
+        e.originalEvent.stopPropagation();
+        
         const coordinates = e.lngLat;
         const popupContent = this.createPopupContent(layer);
         
@@ -765,5 +798,17 @@ export class MapViewComponent implements AfterViewInit, OnDestroy, OnChanges {
     console.log('Final zoom:', finalZoom);
     
     return finalZoom;
+  }
+
+  // Hide popup method
+  private hidePopup(): void {
+    if (this.popup && this.popup.isOpen()) {
+      this.popup.remove();
+    }
+  }
+
+  // Public method to hide popup (can be called from parent components)
+  public closePopup(): void {
+    this.hidePopup();
   }
 }

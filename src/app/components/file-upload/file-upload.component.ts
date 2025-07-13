@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, Input } from '@angular/core';
 import * as shapefile from 'shapefile';
 import * as toGeoJSON from '@mapbox/togeojson';
 import * as tt from '@tomtom-international/web-sdk-maps';
+import { MapViewComponent } from '../map-view/map-view.component';
 
 export interface LayerInfo {
   id: string;
@@ -26,6 +27,7 @@ export class FileUploadComponent {
   @Output() layerAdded = new EventEmitter<LayerInfo>();
   @Output() layerRemoved = new EventEmitter<string>();
   @Output() layerZoomRequested = new EventEmitter<LayerInfo>();
+  @Input() mapView?: MapViewComponent;
 
   uploadedLayers: LayerInfo[] = [];
   isUploading = false;
@@ -46,6 +48,11 @@ export class FileUploadComponent {
     const files: FileList = event.target.files;
     if (files.length === 0) return;
 
+    // Hide popup when selecting files
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+
     this.isUploading = true;
     this.processFiles(files);
   }
@@ -53,6 +60,11 @@ export class FileUploadComponent {
   onFileDrop(event: DragEvent): void {
     event.preventDefault();
     this.isDragover = false;
+    
+    // Hide popup when dropping files
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
     
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
@@ -249,11 +261,21 @@ export class FileUploadComponent {
   }
 
   removeLayer(layerId: string): void {
+    // Hide popup when removing layers
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+    
     this.uploadedLayers = this.uploadedLayers.filter(layer => layer.id !== layerId);
     this.layerRemoved.emit(layerId);
   }
 
   zoomToLayer(layer: LayerInfo): void {
+    // Hide popup when zooming to layers
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+    
     console.log('Current layers before filter:', this.uploadedLayers.map(l => ({ name: l.name, center: l.center })));
     console.log('Target layer:', { name: layer.name, center: layer.center });
     
