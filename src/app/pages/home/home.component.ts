@@ -202,6 +202,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.zoomToLayer(layer);
   }
 
+  // Hide file upload panel when clicking on map
+  hideFileUploadPanel(): void {
+    this.showFileUpload = false;
+  }
+
   // Zoom to layer
   private zoomToLayer(layer: LayerInfo) {
     if (this.mapView) {
@@ -538,6 +543,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   onDocumentClick(event: Event) {
     const target = event.target as HTMLElement;
     
+    // Hide file upload panel when clicking outside it (but not on sidebar)
+    const sidebarElement = document.querySelector('.Side_bar');
+    const fileUploadPanel = document.querySelector('.file-upload-panel');
+    
+    if (fileUploadPanel && !fileUploadPanel.contains(target) && 
+        sidebarElement && !sidebarElement.contains(target)) {
+      this.hideFileUploadPanel();
+    }
+    
     // Don't handle if polygon click is in progress
     if (this.isPolygonClickInProgress) {
       return;
@@ -647,6 +661,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const target = event.target as HTMLElement;
     const mapElement = document.getElementById('map_section');
     const dialogElement = document.getElementById('dialog_detect');
+    
+    // Hide file upload panel when clicking on map
+    if (mapElement && mapElement.contains(target)) {
+      this.hideFileUploadPanel();
+    }
     
     // Don't handle if polygon click is in progress
     if (this.isPolygonClickInProgress) {
