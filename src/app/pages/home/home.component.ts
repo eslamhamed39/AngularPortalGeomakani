@@ -120,6 +120,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     
     if (this.showProfileMenu) {
       this.showDetectionMenu = false;
+      this.showFileUpload = false; // إغلاق قائمة رفع الملفات
       this.activeSidebarIndex = 99;
     } else {
       this.activeSidebarIndex = 0;

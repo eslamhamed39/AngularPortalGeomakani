@@ -258,6 +258,398 @@
   }
 }
 
+/* ===== Enhanced Responsive Styles ===== */
+
+/* Extra Small Devices (phones, 576px and down) */
+@media (max-width: 575.98px) {
+  .upload-section,
+  .layers-section {
+    padding: 12px;
+  }
+
+  .upload-area {
+    padding: 20px 12px;
+    border-radius: 15px;
+  }
+
+  .upload-area h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .upload-area p {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .upload-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 20px;
+  }
+
+  .layer-item {
+    padding: 12px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+  }
+
+  .layer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .layer-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .layer-color {
+    width: 12px;
+    height: 12px;
+    margin-left: 0;
+  }
+
+  .layer-name {
+    font-size: 13px;
+    margin: 0 0 2px 0;
+  }
+
+  .layer-type {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+
+  .layer-actions {
+    align-self: flex-end;
+    gap: 6px;
+  }
+
+  .layer-actions button {
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  .layer-stats {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .stat-item {
+    gap: 2px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .unit-toggle {
+    gap: 4px;
+    
+    .btn-link {
+      font-size: 9px;
+      padding: 3px 4px;
+      border-radius: 10px;
+    }
+  }
+}
+
+/* Small Devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .upload-section,
+  .layers-section {
+    padding: 14px;
+  }
+
+  .upload-area {
+    padding: 22px 14px;
+    border-radius: 18px;
+  }
+
+  .upload-area h3 {
+    font-size: 20px;
+  }
+
+  .upload-area p {
+    font-size: 15px;
+  }
+
+  .upload-btn {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+
+  .layer-item {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .layer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .layer-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .layer-name {
+    font-size: 14px;
+  }
+
+  .layer-type {
+    font-size: 12px;
+  }
+
+  .layer-actions {
+    align-self: flex-end;
+    gap: 8px;
+  }
+
+  .layer-stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .stat-value {
+    font-size: 13px;
+  }
+}
+
+/* Medium Devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .upload-section,
+  .layers-section {
+    padding: 16px;
+  }
+
+  .upload-area {
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+
+  .upload-area h3 {
+    font-size: 22px;
+  }
+
+  .upload-area p {
+    font-size: 16px;
+  }
+
+  .upload-btn {
+    padding: 16px 28px;
+    font-size: 16px;
+  }
+
+  .layer-item {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .layer-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .layer-info {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .layer-stats {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Large Devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .upload-section,
+  .layers-section {
+    padding: 20px;
+  }
+
+  .upload-area {
+    padding: 28px 20px;
+    border-radius: 25px;
+  }
+
+  .upload-area h3 {
+    font-size: 24px;
+  }
+
+  .upload-area p {
+    font-size: 17px;
+  }
+
+  .upload-btn {
+    padding: 18px 32px;
+    font-size: 17px;
+  }
+
+  .layer-item {
+    padding: 18px;
+    border-radius: 25px;
+  }
+
+  .layer-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+}
+
+/* Landscape Orientation for Mobile */
+@media (max-width: 767.98px) and (orientation: landscape) {
+  .upload-section,
+  .layers-section {
+    padding: 10px;
+  }
+
+  .upload-area {
+    padding: 16px 10px;
+    border-radius: 15px;
+  }
+
+  .upload-area h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .upload-area p {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .upload-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .layer-item {
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 6px;
+  }
+
+  .layer-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .layer-info {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .layer-name {
+    font-size: 12px;
+  }
+
+  .layer-type {
+    font-size: 10px;
+  }
+
+  .layer-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-top: 6px;
+    padding-top: 6px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+
+  .stat-value {
+    font-size: 11px;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .upload-btn {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .layer-actions button {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .unit-toggle .btn-link {
+    min-height: 32px;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .upload-area {
+    border-width: 2px;
+  }
+
+  .layer-item {
+    border-width: 1px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .upload-section,
+  .layers-section {
+    padding: 0;
+  }
+
+  .upload-area {
+    border: 1px solid #ccc;
+    background: white;
+    box-shadow: none;
+  }
+
+  .layer-item {
+    border: 1px solid #ccc;
+    background: white;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .layer-actions {
+    display: none;
+  }
+}
+
 // Scrollbar Styling
 .layers-list::-webkit-scrollbar {
   width: 6px;
@@ -292,3 +684,209 @@
     transform: translateY(0);
   }
 } 
+
+/* تحسينات إضافية لقائمة رفع الملفات على الشاشات الصغيرة والمتوسطة */
+
+@media (max-width: 991.98px) {
+  .file-upload-container {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 0 2px;
+  }
+  .upload-section, .layers-section {
+    padding: 10px 6px 10px 6px;
+  }
+  .upload-header h5 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .upload-header p {
+    font-size: 12px;
+  }
+  .upload-area {
+    padding: 16px 6px;
+    border-radius: 16px;
+    min-height: 120px;
+  }
+  .upload-content .upload-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .upload-content p {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .upload-content small {
+    font-size: 10px;
+  }
+  .upload-progress {
+    font-size: 12px;
+    padding: 6px;
+    margin-top: 8px;
+  }
+  .layers-header {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .layers-list {
+    max-height: 220px;
+    padding: 0 2px 40px 2px;
+  }
+  .layer-item {
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+  .layer-header {
+    margin-bottom: 6px;
+    gap: 4px;
+  }
+  .layer-info {
+    gap: 4px;
+  }
+  .layer-color {
+    width: 10px;
+    height: 10px;
+    margin-left: 6px;
+  }
+  .layer-name {
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+  .layer-type {
+    font-size: 10px;
+    padding: 1px 3px;
+  }
+  .layer-actions {
+    gap: 4px;
+  }
+  .layer-actions button {
+    padding: 2px 4px;
+    font-size: 11px;
+    border-radius: 6px;
+  }
+  .layer-stats {
+    gap: 4px;
+    margin-top: 4px;
+    padding-top: 4px;
+  }
+  .stat-item {
+    gap: 1px;
+  }
+  .stat-label {
+    font-size: 10px;
+  }
+  .stat-value {
+    font-size: 11px;
+    gap: 2px;
+  }
+  .unit-toggle {
+    gap: 2px;
+  }
+  .unit-toggle .btn-link {
+    font-size: 9px;
+    padding: 2px 3px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .file-upload-container {
+    border-radius: 6px;
+    padding: 0 1px;
+  }
+  .upload-section, .layers-section {
+    padding: 6px 2px 6px 2px;
+  }
+  .upload-header h5 {
+    font-size: 14px;
+  }
+  .upload-area {
+    padding: 8px 2px;
+    border-radius: 10px;
+    min-height: 80px;
+  }
+  .upload-content .upload-icon {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .upload-content p {
+    font-size: 11px;
+  }
+  .upload-content small {
+    font-size: 8px;
+  }
+  .layers-header {
+    font-size: 12px;
+  }
+  .layers-list {
+    max-height: 120px;
+    padding: 0 1px 20px 1px;
+  }
+  .layer-item {
+    padding: 4px;
+    border-radius: 6px;
+    margin-bottom: 3px;
+  }
+  .layer-header {
+    margin-bottom: 2px;
+    gap: 2px;
+  }
+  .layer-info {
+    gap: 2px;
+  }
+  .layer-color {
+    width: 7px;
+    height: 7px;
+    margin-left: 2px;
+  }
+  .layer-name {
+    font-size: 10px;
+  }
+  .layer-type {
+    font-size: 8px;
+    padding: 0 2px;
+  }
+  .layer-actions {
+    gap: 2px;
+  }
+  .layer-actions button {
+    padding: 1px 2px;
+    font-size: 9px;
+    border-radius: 4px;
+  }
+  .layer-stats {
+    gap: 2px;
+    margin-top: 2px;
+    padding-top: 2px;
+  }
+  .stat-item {
+    gap: 0;
+  }
+  .stat-label {
+    font-size: 8px;
+  }
+  .stat-value {
+    font-size: 9px;
+    gap: 1px;
+  }
+  .unit-toggle {
+    gap: 1px;
+  }
+  .unit-toggle .btn-link {
+    font-size: 8px;
+    padding: 1px 2px;
+    border-radius: 6px;
+  }
+} 
+
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .layers-list{
+    max-height: 200px !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .layers-list{
+    max-height: 200px !important;
+  }
+}

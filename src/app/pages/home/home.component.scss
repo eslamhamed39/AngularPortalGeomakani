@@ -307,7 +307,7 @@ li {
 #dialog_detect {
   position: absolute;
   top: 15px;
-  left: 15px;
+  right: 30px;
   width: calc(100% - 30px);
   height: calc(100% - 30px);
   background-color: #ffffff9c;
@@ -321,7 +321,6 @@ li {
 .dialog_detect {
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
@@ -335,11 +334,11 @@ li {
 @keyframes detect_card {
   from {
     opacity: 0;
-    left: 40%;
+    right: 0px;
   }
   to {
     opacity: 1;
-    left: 50%;
+    right: 30px;
   }
 }
 
@@ -364,9 +363,10 @@ li {
 }
 
 .container_dash {
-  width: 41.67%;
-  height: 100%;
-  padding-left: 7.5px;
+  // width: 41.67%;
+  // height: 100%;
+  // padding-left: 7.5px;
+  // padding-right: 20px;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -868,109 +868,690 @@ video {
 }
 
 /*--- Responsive Styles ---*/
-@media (max-width: 600px) {
+
+/* ================== Responsive Media Queries (Standard Breakpoints) ================== */
+
+@media (max-width: 575.98px) {
   .Side_bar {
-    width: 60px;
-    left: 3px;
+    width: 50px;
+    left: 5px;
+    border-radius: 25px;
+  }
+  .Side_v_logo {
+    width: 70%;
+    top: 10px;
+  }
+  .white_bg {
+    width: 45px;
+  }
+  .ul_icon_sidebar .nav-link {
+    padding: 0.5rem 0.25rem;
+    font-size: 1.2rem;
+  }
+  #dropdownUser3 {
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
   }
   .list_detection {
-    left: 60px;
-    width: 80vw;
+    left: 55px;
+    width: calc(100vw - 70px);
+    max-width: 300px;
+    border-radius: 20px;
   }
-}
-
-@media (max-width: 992px) {
-  .container_dash {
-    display: none;
+  .list_Service_container div {
+    min-width: 200px;
+  }
+  .list_Service_container div li {
+    min-width: 200px;
+    margin: 0 5px;
+  }
+  .dropdown-item1 {
+    padding: 8px 0;
+    font-size: 14px;
+  }
+  .list_detection2 {
+    left: 100%;
+    min-width: 180px;
+    top: 0;
+  }
+  .list_detection1 {
+    width: 200px;
+    left: 55px;
+    bottom: 10%;
   }
   #dialog_detect {
-    top: 40px;
-    height: 80%;
-    width: 80%;
-    left: 50%;
-    transform: translate(-40%);
+    top: 10px;
+    right: 30px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border-radius: 20px;
+    padding: 10px;
   }
-  .list_date_container {
-    height: auto !important;
-    overflow: hidden;
-    border-radius: 30px;
-    width: auto;
+  .container_data_dialog {
+    flex-direction: column;
+    gap: 10px;
   }
-  .ul_container2 {
-    overflow: auto;
-    min-height: auto;
-    max-height: 100px;
+  .container_dashbord {
     width: 100%;
+    height: 60%;
+    padding-right: 0;
   }
-  .ul_container2 ul {
-    height: auto !important;
-    overflow: auto !important;
-    width: auto;
+  .container_dash {
+    width: 100%;
+    height: 40%;
+    padding-left: 0;
+    display: block;
   }
-  .option .option-text, 
+  #page {
+    padding: 0;
+    gap: 5px;
+  }
+  .wrapper {
+    border-radius: 20px;
+  }
+  .scroller {
+    width: 30px;
+    height: 30px;
+  }
+  .select-menu,
+  .select-menu1 {
+    min-width: 120px;
+  }
+  .select-menu#right_selector,
+  .select-menu1#right_selector {
+    top: 5px;
+    left: 5px;
+  }
+  .select-menu#left_selector,
+  .select-menu1#left_selector {
+    top: 5px;
+    right: 5px;
+  }
+  .select-menu .select-btn,
+  .select-menu1 .select-btn1 {
+    height: 35px;
+    padding: 15px;
+    font-size: 14px;
+  }
+  .option .option-text,
   .option1 .option-text1 {
+    font-size: 12px;
+  }
+  .dashbord {
+    padding: 0;
+  }
+  .dashbord img {
+    border-radius: 15px;
+  }
+  .timeline {
+    border-radius: 15px;
+  }
+  .container_row2 {
+    gap: 5px;
+  }
+  .piechart,
+  .parchart {
+    border-radius: 15px;
+  }
+  .file-upload-panel {
+    position: fixed !important;
+    top: 10px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    margin-top: 0 !important;
+    width: 98vw !important;
+    max-width: 99vw !important;
+    min-width: 120px !important;
+    max-height: 55vh !important;
+    min-height: 60px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.13) !important;
+    z-index: 1003 !important;
+    overflow: auto !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .file-upload-panel .upload-area {
+    padding: 6px 2px !important;
+    min-height: 50px !important;
+    border-radius: 6px !important;
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+  // Mobile optimizations
+  body {
+    overflow-x: hidden;
+  }
+  .home_content {
+    overflow-x: hidden;
+  }
+  #Home_section {
+    overflow-x: hidden;
+  }
+  .Side_bar {
+    position: fixed;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 1000;
+  }
+  .list_detection {
+    position: fixed;
+    top: 0;
+    z-index: 1001;
+  }
+  .list_detection1 {
+    position: fixed;
+    bottom: 5%;
+    z-index: 1001;
+  }
+  .list_detection2 {
+    z-index: 1002;
+  }
+  .file-upload-panel {
+    z-index: 1003;
+  }
+  #dialog_detect {
+    z-index: 1004;
+  }
+  .select-menu,
+  .select-menu1 {
+    z-index: 1005;
+  }
+  // Very small screens
+  .Side_bar {
+    width: 45px;
+    left: 3px;
+    border-radius: 20px;
+  }
+  .Side_v_logo {
+    width: 65%;
+    top: 8px;
+  }
+  .white_bg {
+    width: 40px;
+  }
+  .ul_icon_sidebar .nav-link {
+    padding: 0.4rem 0.2rem;
+    font-size: 1rem;
+  }
+  #dropdownUser3 {
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+  }
+  .list_detection {
+    left: 48px;
+    width: calc(100vw - 55px);
+    max-width: 250px;
+    border-radius: 15px;
+  }
+  .list_Service_container div {
+    min-width: 180px;
+  }
+  .list_Service_container div li {
+    min-width: 180px;
+    margin: 0 3px;
+  }
+  .dropdown-item1 {
+    padding: 6px 0;
+    font-size: 12px;
+  }
+  .list_detection2 {
+    left: 100%;
+    min-width: 150px;
+  }
+  .list_detection1 {
+    width: 180px;
+    left: 48px;
+  }
+  #dialog_detect {
+    top: 5px;
+    right: 30px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    border-radius: 15px;
+    padding: 5px;
+  }
+  .container_data_dialog {
+    gap: 5px;
+  }
+  .container_dashbord {
+    height: 55%;
+  }
+  .container_dash {
+    height: 45%;
+  }
+  .scroller {
+    width: 25px;
+    height: 25px;
+  }
+  .select-menu,
+  .select-menu1 {
+    min-width: 100px;
+  }
+  .select-menu#right_selector,
+  .select-menu1#right_selector {
+    top: 3px;
+    left: 3px;
+  }
+  .select-menu#left_selector,
+  .select-menu1#left_selector {
+    top: 3px;
+    right: 3px;
+  }
+  .select-menu .select-btn,
+  .select-menu1 .select-btn1 {
+    height: 30px;
+    padding: 12px;
+    font-size: 12px;
+  }
+  .option .option-text,
+  .option1 .option-text1 {
+    font-size: 11px;
+  }
+  .file-upload-panel {
+    width: 95vw;
+    max-width: 300px;
+    left: 48px;
+  }
+  // Landscape orientation for mobile
+  .Side_bar {
+    width: 50px;
+    left: 5px;
+  }
+  .list_detection {
+    left: 55px;
+    width: calc(100vw - 70px);
+    max-width: 300px;
+  }
+  .list_detection1 {
+    left: 55px;
+  }
+  #dialog_detect {
+    top: 10px;
+    right: 30px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+  }
+  .container_data_dialog {
+    flex-direction: row;
+    gap: 15px;
+  }
+  .container_dashbord {
+    width: 60%;
+    height: 100%;
+  }
+  .container_dash {
+    width: 40%;
+    height: 100%;
+    display: block;
+  }
+  .file-upload-panel {
+    left: 55px;
+    width: 320px;
+    top: 0;
+    transform: none;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .Side_bar {
+    width: 60px;
+    left: 8px;
+  }
+  .list_detection {
+    left: 70px;
+    width: calc(100vw - 90px);
+    max-width: 350px;
+  }
+  .list_detection2 {
+    left: 100%;
+    min-width: 200px;
+  }
+  .list_detection1 {
+    width: 220px;
+    left: 70px;
+  }
+  #dialog_detect {
+    top: 20px;
+    right: 30px;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+  }
+  .container_data_dialog {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .container_dashbord {
+    width: 100%;
+    height: 65%;
+  }
+  .container_dash {
+    width: 100%;
+    height: 35%;
+    display: block;
+  }
+  .file-upload-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 400px;
+    max-height: 85vh;
+    left: 70px;
+    top: 0;
+    transform: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .Side_bar {
+    width: 70px;
+    left: 10px;
+  }
+  .list_detection {
+    left: 85px;
+    width: calc(100vw - 100px);
+    max-width: 285px;
+  }
+  .list_detection2 {
+    left: 100%;
+    min-width: 220px;
+  }
+  .list_detection1 {
+    width: 240px;
+    left: 80px;
+  }
+  #dialog_detect {
+    top: 25px;
+    right: 30px;
+    width: calc(100% - 125px);
+    height: calc(100% - 110px);
+  }
+  .white_bg{
+    width: 66px;
+  }
+  .container_data_dialog {
+    flex-direction: row;
+    gap: 20px;
+  }
+  .container_dashbord {
+    width: 60%;
+    height: 100%;
+  }
+  .container_dash{
+
+    padding-right: 20px;
+    padding-left: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .file-upload-panel {
+    left: 80px;
+    width: 380px;
+  }
+  // File upload panel for tablets
+  .file-upload-panel {
+    position: fixed !important;
+    left: 81px !important;
+    right: auto !important;
+    margin-top: 0 !important;
+    width: 250px !important;
+    max-width: 95vw !important;
+    min-width: 200px !important;
+    height: auto !important;
+    max-height: 70vh !important;
+    min-height: 120px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12) !important;
+    z-index: 1003 !important;
+    overflow: auto !important;
+    padding: 0 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .file-upload-panel .upload-area {
+    padding: 10px 4px !important;
+    min-height: 80px !important;
+    border-radius: 10px !important;
     font-size: 13px !important;
-    color: #333;
+    margin-bottom: 8px !important;
+  }
+  // Portrait tablets
+  .Side_bar {
+    width: 75px;
+    left: 8px;
+  }
+
+  .list_detection1 {
+    width: 230px;
+    left: 85px;
+  }
+  .file-upload-panel {
+    left: 85px;
+    width: 360px;
   }
 }
 
-@media (max-width: 575px) {
-  .container_dash {
-    display: none;
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .Side_bar {
+    width: 80px;
+    left: 10px;
+  }
+  .list_detection {
+    left: 90px;
+  }
+  .list_detection2 {
+    left: 100%;
+    min-width: 240px;
+  }
+  .list_detection1 {
+    width: 250px;
+    left: 90px;
   }
   #dialog_detect {
     top: 40px;
-    height: 80%;
-    width: 80%;
-    left: 50%;
-    transform: translate(-40%);
+    right: 30px;
+    width: calc(100% - 125px);
+    height: calc(100% - 80px);
   }
-}
-
-@media (min-width: 576px) {
+  .container_data_dialog {
+    flex-direction: row;
+    gap: 0px;
+  }
+  .container_dashbord {
+    width: 58.33%;
+    height: 100%;
+  }
   .container_dash {
+    width: 41.67%;
+    height: 100%;
     display: block;
   }
-  #dialog_detect {
-    top: 40px;
-    height: 80%;
-    width: 80%;
-    left: 50%;
-    transform: translate(-40%);
+  .file-upload-panel {
+    left: 90px;
+    width: 400px;
+  }
+  .file-upload-panel{
+    max-height: 95vh;
+  }
+  .white_bg[_ngcontent-ng-c3255183815] {
+    width: 70px;
   }
 }
 
-@media (min-width: 700px) {
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .Side_bar {
+    width: 90px;
+    left: 10px;
+  }
+  .list_detection {
+    left: 100px;
+  }
+  .list_detection2 {
+    left: 100%;
+    min-width: 260px;
+  }
+  .list_detection1 {
+    width: 250px;
+    left: 100px;
+  }
+  #dialog_detect {
+    top: 35px;
+    right: 30px;
+    width: calc(100% - 120px);
+    height: calc(100% - 75px);
+  }
+  .container_data_dialog {
+    flex-direction: row;
+    gap: 0px;
+  }
+  .container_dashbord {
+    width: 58.33%;
+    height: 100%;
+  }
+  .white_bg {
+    width: 70px;
+  }
+  .layers-list{
+    max-height: 200px !important;
+  }
   .container_dash {
+    width: 41.67%;
+    height: 100%;
     display: block;
   }
-  #dialog_detect {
-    top: 40px;
-    height: 80%;
-    width: 80%;
-    left: 50%;
-    transform: translate(-40%);
+  .file-upload-panel {
+    left: 100px;
+    width: 420px;
+  }
+  // Landscape tablets
+  .Side_bar {
+    width: 85px;
+    left: 10px;
+  }
+  .list_detection {
+    left: 95px;
+  }
+  .list_detection1 {
+    width: 240px;
+    left: 95px;
+  }
+
+  .file-upload-panel {
+    left: 95px;
+    width: 410px;
   }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1400px) {
+  .list_detection {
+    max-width: 550px;
+  }
+  .list_detection2 {
+    min-width: 280px;
+  }
+  .file-upload-panel {
+    width: 450px;
+  }
+  // Ultra wide screens
+  .Side_bar {
+    width: 100px;
+    left: 15px;
+  }
+  .list_detection {
+    left: 115px;
+    width: calc(100vw - 140px);
+    max-width: 285px;
+  }
+  .list_detection1 {
+    width: 280px;
+    left: 115px;
+  }
+  .list_detection2 {
+    min-width: 300px;
+  }
+  #dialog_detect {
+    top: 60px;
+    right: 30px;
+    width: calc(100% - 200px);
+    height: calc(100% - 120px);
+  }
+  .file-upload-panel {
+    left: 115px;
+    width: 500px;
+  }
+}
+
+/* ================== Special Media Queries (Height & Device Specific) ================== */
+
+@media (max-height: 850px) {
+  .file-upload-panel {
+    top: -20% !important;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .scroller {
+    width: 44px;
+    height: 44px;
+  }
+  .select-menu .select-btn,
+  .select-menu1 .select-btn1 {
+    min-height: 44px;
+  }
+  .dropdown-item1 {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ul_icon_sidebar .nav-link {
+    min-height: 44px;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .Side_v_logo {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  .watermark img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+@media print {
+  .Side_bar,
+  .list_detection,
+  .list_detection1,
+  .list_detection2,
+  .file-upload-panel,
+  .scroller,
+  .select-menu,
+  .select-menu1 {
+    display: none !important;
+  }
+  #dialog_detect {
+    position: static;
+    width: 100%;
+    height: auto;
+    background: white;
+  }
+  .container_data_dialog {
+    flex-direction: column;
+  }
+  .container_dashbord,
   .container_dash {
-    display: block;
-  }
-  #dialog_detect {
-    top: 40px;
-    height: 80%;
-    width: 80%;
-    left: 50%;
-    transform: translate(-45%);
-  }
-}
-
-@media (min-width: 1550px) {
-  #dialog_detect {
-    top: 40px;
-    height: 80%;
-    width: 80%;
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -1018,16 +1599,109 @@ video {
   }
 }
 
-// تحسين التجاوب للشاشات الصغيرة
-@media (max-width: 768px) {
-  .file-upload-panel {
+/* Fix for iOS Safari viewport issues */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 767.98px) {
+    .Side_bar {
+      position: fixed;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+    
+    .list_detection {
+      position: fixed;
+      top: 0;
+    }
+    
+    .list_detection1 {
+      position: fixed;
+      bottom: 5%;
+    }
+  }
+}
+
+/* Fix for Android Chrome viewport issues */
+@media screen and (max-width: 767.98px) and (-webkit-min-device-pixel-ratio: 1) {
+  .Side_bar {
     position: fixed;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90vw;
-    max-width: 400px;
-    max-height: 90vh;
+    transform: translate(0, -50%);
+  }
+}
+
+/* Prevent zoom on input focus for iOS */
+@media screen and (max-width: 767.98px) {
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Fix for Samsung Internet browser */
+@media screen and (max-width: 767.98px) {
+  .Side_bar {
+    -webkit-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+  }
+}
+
+/* Fix for Firefox mobile */
+@-moz-document url-prefix() {
+  @media (max-width: 767.98px) {
+    .Side_bar {
+      position: fixed;
+    }
+  }
+}
+
+/* Fix for Edge mobile */
+@media screen and (max-width: 767.98px) {
+  .Side_bar {
+    position: fixed;
+  }
+}
+
+/* Fix for foldable devices */
+@media (max-width: 767.98px) {
+  @supports (screen-fold-angle: 0deg) {
+    .Side_bar {
+      position: fixed;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+    
+    .list_detection {
+      position: fixed;
+      top: 0;
+    }
+    
+    .list_detection1 {
+      position: fixed;
+      bottom: 5%;
+    }
+  }
+}
+
+/* Fix for devices with notches */
+@media (max-width: 767.98px) {
+  @supports (padding-top: env(safe-area-inset-top)) {
+    .Side_bar {
+      top: calc(50% + env(safe-area-inset-top));
+    }
+    
+    #dialog_detect {
+      top: calc(10px + env(safe-area-inset-top));
+      left: calc(10px + env(safe-area-inset-left));
+      width: calc(100% - 20px - env(safe-area-inset-left) - env(safe-area-inset-right));
+      height: calc(100% - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
   }
 }
 

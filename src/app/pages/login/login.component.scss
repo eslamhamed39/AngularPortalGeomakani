@@ -171,4 +171,199 @@ body {
     background-position: center center;
     /* يمكنك إضافة فلتر أو لون فوق الخلفية إذا أردت */
   }
+
+/* ===== Responsive Styles ===== */
+
+/* Extra Small Devices (phones, 576px and down) */
+@media (max-width: 575.98px) {
+  .container_input {
+    height: 450px;
+    width: 90vw;
+    max-width: 350px;
+    border-radius: 30px;
+    padding: 20px 25px;
+  }
+
+  .container_input h3 {
+    font-size: 24px;
+    line-height: 32px;
+    margin-bottom: 10px;
+  }
+
+  label {
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  input {
+    height: 45px;
+    padding: 0 15px;
+    margin-top: 6px;
+    font-size: 13px;
+  }
+
+  .btn_login1 {
+    margin-top: 25px;
+    width: 70%;
+    padding: 12px 0;
+    font-size: 16px;
+  }
+
+  #loginPage .image img {
+    width: 60%;
+  }
+
+  .status,
+  .redMessage,
+  .login_Success {
+    font-size: 12px;
+    padding: 4px;
+  }
+}
+
+/* Small Devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .container_input {
+    height: 480px;
+    width: 85vw;
+    max-width: 380px;
+    border-radius: 40px;
+    padding: 20px 30px;
+  }
+
+  .container_input h3 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  label {
+    font-size: 15px;
+  }
+
+  input {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .btn_login1 {
+    width: 65%;
+    font-size: 17px;
+  }
+
+  #loginPage .image img {
+    width: 65%;
+  }
+}
+
+/* Medium Devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .container_input {
+    height: 500px;
+    width: 80vw;
+    max-width: 400px;
+    border-radius: 45px;
+    padding: 18px 35px;
+  }
+
+  .container_input h3 {
+    font-size: 30px;
+    line-height: 38px;
+  }
+
+  .btn_login1 {
+    width: 62%;
+  }
+}
+
+/* Large Devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .container_input {
+    height: 520px;
+    width: 400px;
+    border-radius: 50px;
+    padding: 15px 35px;
+  }
+
+  .container_input h3 {
+    font-size: 32px;
+    line-height: 42px;
+  }
+
+  .btn_login1 {
+    width: 60%;
+  }
+}
+
+/* Landscape Orientation for Mobile */
+@media (max-width: 767.98px) and (orientation: landscape) {
+  .container_input {
+    height: 400px;
+    width: 70vw;
+    max-width: 450px;
+    padding: 15px 30px;
+  }
+
+  .container_input h3 {
+    font-size: 22px;
+    line-height: 28px;
+    margin-bottom: 5px;
+  }
+
+  label {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+  input {
+    height: 40px;
+    margin-top: 5px;
+  }
+
+  .btn_login1 {
+    margin-top: 20px;
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  #loginPage .image img {
+    width: 50%;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn_login1 {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  input {
+    min-height: 44px;
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  #loginPage .image img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .login-bg {
+    display: none;
+  }
+
+  .container_input {
+    position: static;
+    transform: none;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+}
   
