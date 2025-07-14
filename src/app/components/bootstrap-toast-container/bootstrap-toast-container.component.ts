@@ -51,6 +51,7 @@ import { BootstrapToastService, BootstrapToast } from '../../services/bootstrap-
       transform-origin: top right;
       opacity: 0;
       transform: translateX(100%) scale(0.8);
+      border-radius :20px ;
     }
     
     .toast-animation {
@@ -62,15 +63,19 @@ import { BootstrapToastService, BootstrapToast } from '../../services/bootstrap-
     }
     
     .bg-success {
-      background-color: #198754 !important;
+      background-color:rgba(25, 135, 84, 0.7) !important;
+      border: 1px solid rgb(20, 199, 116);
     }
     
     .bg-danger {
-      background-color: #dc3545 !important;
+      background-color:rgba(136, 26, 37, 0.7) !important;
+      border: 1px solid rgb(245, 37, 58);
+
     }
     
     .bg-warning {
-      background-color: #ffc107 !important;
+      background-color:rgba(179, 139, 19, 0.7) !important;
+      border: 1px solid rgb(255, 191, 0);
       color: #000 !important;
     }
     
@@ -97,15 +102,18 @@ import { BootstrapToastService, BootstrapToast } from '../../services/bootstrap-
       filter: none;
     }
     
-    /* Enter Animation */
+    /* Enter Animation - Bounce In */
     @keyframes toastSlideIn {
       0% {
         transform: translateX(100%) scale(0.8);
         opacity: 0;
       }
-      50% {
-        transform: translateX(5%) scale(1.02);
-        opacity: 0.9;
+      60% {
+        transform: translateX(-10%) scale(1.05);
+        opacity: 1;
+      }
+      80% {
+        transform: translateX(3%) scale(0.98);
       }
       100% {
         transform: translateX(0) scale(1);
@@ -113,18 +121,18 @@ import { BootstrapToastService, BootstrapToast } from '../../services/bootstrap-
       }
     }
     
-    /* Leave Animation */
+    /* Leave Animation - Fade Out with Scale */
     @keyframes toastSlideOut {
       0% {
         transform: translateX(0) scale(1);
         opacity: 1;
       }
-      50% {
-        transform: translateX(5%) scale(1.02);
+      20% {
+        transform: translateX(-3%) scale(1.02);
         opacity: 0.9;
       }
       100% {
-        transform: translateX(100%) scale(0.8);
+        transform: translateX(100%) scale(0.7);
         opacity: 0;
       }
     }
@@ -145,9 +153,12 @@ import { BootstrapToastService, BootstrapToast } from '../../services/bootstrap-
           transform: translateY(-100%) scale(0.8);
           opacity: 0;
         }
-        50% {
-          transform: translateY(5%) scale(1.02);
-          opacity: 0.9;
+        60% {
+          transform: translateY(10%) scale(1.05);
+          opacity: 1;
+        }
+        80% {
+          transform: translateY(-3%) scale(0.98);
         }
         100% {
           transform: translateY(0) scale(1);
@@ -160,12 +171,12 @@ import { BootstrapToastService, BootstrapToast } from '../../services/bootstrap-
           transform: translateY(0) scale(1);
           opacity: 1;
         }
-        50% {
-          transform: translateY(5%) scale(1.02);
+        20% {
+          transform: translateY(-3%) scale(1.02);
           opacity: 0.9;
         }
         100% {
-          transform: translateY(-100%) scale(0.8);
+          transform: translateY(-100%) scale(0.7);
           opacity: 0;
         }
       }
@@ -180,6 +191,12 @@ export class BootstrapToastContainerComponent implements OnInit {
   ngOnInit() {
     this.toastService.toasts$.subscribe(toasts => {
       this.toasts = toasts;
+    });
+    // استمع لطلبات الإزالة مع الأنيميشن
+    this.toastService.removeWithAnimation$.subscribe(id => {
+      if (id) {
+        this.removeToast(id);
+      }
     });
   }
 

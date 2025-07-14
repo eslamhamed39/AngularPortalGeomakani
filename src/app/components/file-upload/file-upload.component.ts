@@ -3,6 +3,7 @@ import * as shapefile from 'shapefile';
 import * as toGeoJSON from '@mapbox/togeojson';
 import * as tt from '@tomtom-international/web-sdk-maps';
 import { MapViewComponent } from '../map-view/map-view.component';
+import { BootstrapToastService } from '../../services/bootstrap-toast.service';
 
 export interface LayerInfo {
   id: string;
@@ -32,7 +33,7 @@ export class FileUploadComponent {
   uploadedLayers: LayerInfo[] = [];
   isUploading = false;
   isDragover = false;
-  supportedFormats = '.shp,.dbf,.kml,.kmz';
+  supportedFormats = '.shp,.kml,.kmz,.geojson';
   
   private colorPalette = [
     '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
@@ -42,7 +43,7 @@ export class FileUploadComponent {
   ];
   private colorIndex = 0;
 
-  constructor() {}
+  constructor(private toastService: BootstrapToastService) {}
 
   onFileSelected(event: any): void {
     const files: FileList = event.target.files;
@@ -78,20 +79,138 @@ export class FileUploadComponent {
       const fileArray = Array.from(files);
       const fileNames = fileArray.map(f => f.name.toLowerCase());
 
-      // Determine file type
-      if (fileNames.some(name => name.endsWith('.kml') || name.endsWith('.kmz'))) {
+      if (fileNames.some(name => name.endsWith('.kml'))) {
         await this.processKMLFile(files);
+        this.toastService.success('KML file uploaded and processed successfully.');
+      } else if (fileNames.some(name => name.endsWith('.kmz'))) {
+        await this.processKMZFile(files);
+        this.toastService.success('KMZ file uploaded and processed successfully.');
       } else if (fileNames.some(name => name.endsWith('.shp'))) {
         await this.processShapefile(files);
+        this.toastService.success('Shapefile uploaded and processed successfully.');
+      } else if (fileNames.some(name => name.endsWith('.geojson'))) {
+        await this.processGeoJSONFile(files);
+        this.toastService.success('GeoJSON file uploaded and processed successfully.');
       } else {
+        this.toastService.error('Unsupported file type. Please upload a supported file.');
         throw new Error('Unsupported file type');
       }
     } catch (error) {
       console.error('Error processing file:', error);
-      alert('An error occurred while processing the file. Please ensure the file is valid.');
+      this.toastService.error('An error occurred while processing the file. Please check the file or its type.');
     } finally {
       this.isUploading = false;
       this.fileInput.nativeElement.value = '';
+    }
+  }
+
+  // دعم KMZ (يتطلب jszip)
+  private async processKMZFile(files: FileList): Promise<void> {
+    const kmzFile = Array.from(files).find(f => f.name.toLowerCase().endsWith('.kmz'));
+    if (!kmzFile) throw new Error('KMZ file not found');
+    try {
+      // dynamic import for jszip
+      const JSZip = (await import('jszip')).default;
+      const zip = await JSZip.loadAsync(await kmzFile.arrayBuffer());
+      // ابحث عن أول ملف kml داخل الأرشيف
+      let kmlFileName = Object.keys(zip.files).find(name => name.toLowerCase().endsWith('.kml'));
+      if (!kmlFileName) throw new Error('No KML file found inside KMZ');
+      const kmlText = await zip.files[kmlFileName].async('text');
+      // استخدم نفس منطق KML
+      await this.processKMLFile({
+        0: new File([kmlText], kmlFileName!, { type: 'text/xml' }),
+        length: 1,
+        item: (i: number) => new File([kmlText], kmlFileName!, { type: 'text/xml' })
+      } as unknown as FileList);
+    } catch (error) {
+      this.toastService.error('Failed to process KMZ file.');
+      throw error;
+    }
+  }
+
+  // دعم GeoJSON
+  private async processGeoJSONFile(files: FileList): Promise<void> {
+    const geojsonFile = Array.from(files).find(f => f.name.toLowerCase().endsWith('.geojson'));
+    if (!geojsonFile) throw new Error('GeoJSON file not found');
+    try {
+      const text = await geojsonFile.text();
+      const geojson = JSON.parse(text);
+      if (geojson.features && geojson.features.length > 0) {
+        geojson.features.forEach((feature: any, idx: number) => {
+          let processedFeature = { ...feature };
+          // إذا كان feature من نوع LineString أو MultiLineString، حوله إلى Polygon
+          if (feature.geometry && feature.geometry.type === 'LineString') {
+            let coords = [...feature.geometry.coordinates];
+            if (
+              coords.length > 2 &&
+              (coords[0][0] !== coords[coords.length - 1][0] || coords[0][1] !== coords[coords.length - 1][1])
+            ) {
+              coords.push([...coords[0]]);
+            }
+            processedFeature = {
+              ...feature,
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords]
+              }
+            };
+          } else if (feature.geometry && feature.geometry.type === 'MultiLineString') {
+            let polygons = feature.geometry.coordinates.map((line: number[][]) => {
+              let coords = [...line];
+              if (
+                coords.length > 2 &&
+                (coords[0][0] !== coords[coords.length - 1][0] || coords[0][1] !== coords[coords.length - 1][1])
+              ) {
+                coords.push([...coords[0]]);
+              }
+              return coords;
+            });
+            processedFeature = {
+              ...feature,
+              geometry: {
+                type: 'Polygon',
+                coordinates: polygons
+              }
+            };
+          }
+          const singleFeatureGeoJSON = {
+            type: 'FeatureCollection',
+            features: [processedFeature]
+          };
+          const layerName = geojson.features.length > 1 ? `${geojsonFile.name.replace(/\.[^/.]+$/, '')}_part${idx + 1}` : geojsonFile.name.replace(/\.[^/.]+$/, '');
+          const layerInfo = this.createLayerInfo(singleFeatureGeoJSON, layerName, 'kml'); // type: 'kml' for now
+          this.uploadedLayers.push(layerInfo);
+          this.layerAdded.emit(layerInfo);
+          this.toastService.success(`Layer ${layerName} added successfully.`);
+        });
+      }
+    } catch (error) {
+      this.toastService.error('Failed to process GeoJSON file.');
+      throw error;
+    }
+  }
+
+  // دعم GPKG (يتطلب مكتبة خارجية)
+  private async processGPKGFile(files: FileList): Promise<void> {
+    const gpkgFile = Array.from(files).find(f => f.name.toLowerCase().endsWith('.gpkg'));
+    if (!gpkgFile) throw new Error('GPKG file not found');
+    try {
+      // ملاحظة: يتطلب دعم GPKG مكتبة خارجية مثل @ngageoint/geopackage أو ogr2ogr-js
+      // مثال (غير مفعل):
+      // const arrayBuffer = await gpkgFile.arrayBuffer();
+      // const GeoPackage = (await import('@ngageoint/geopackage')).GeoPackageAPI;
+      // const gpkg = await GeoPackage.open(arrayBuffer);
+      // const tables = gpkg.getFeatureTables();
+      // for (const table of tables) {
+      //   const features = await gpkg.iterateGeoJSONFeatures(table);
+      //   for await (const feature of features) {
+      //     // نفس منطق التقسيم والتحويل
+      //   }
+      // }
+      this.toastService.warning('GPKG support requires an additional library. Please install @ngageoint/geopackage or use a backend service to convert to GeoJSON.');
+    } catch (error) {
+      this.toastService.error('Failed to process GPKG file.');
+      throw error;
     }
   }
 
@@ -108,9 +227,56 @@ export class FileUploadComponent {
     const geojson = toGeoJSON.kml(kmlDoc);
 
     if (geojson.features && geojson.features.length > 0) {
-      const layerInfo = this.createLayerInfo(geojson, kmlFile.name, 'kml');
-      this.uploadedLayers.push(layerInfo);
-      this.layerAdded.emit(layerInfo);
+      geojson.features.forEach((feature: any, idx: number) => {
+        let processedFeature = { ...feature };
+        // إذا كان feature من نوع LineString أو MultiLineString، حوله إلى Polygon
+        if (feature.geometry && feature.geometry.type === 'LineString') {
+          let coords = [...feature.geometry.coordinates];
+          // إذا لم يكن مغلقًا، أغلقه
+          if (
+            coords.length > 2 &&
+            (coords[0][0] !== coords[coords.length - 1][0] || coords[0][1] !== coords[coords.length - 1][1])
+          ) {
+            coords.push([...coords[0]]);
+          }
+          processedFeature = {
+            ...feature,
+            geometry: {
+              type: 'Polygon',
+              coordinates: [coords]
+            }
+          };
+        } else if (feature.geometry && feature.geometry.type === 'MultiLineString') {
+          let polygons = feature.geometry.coordinates.map((line: number[][]) => {
+            let coords = [...line];
+            if (
+              coords.length > 2 &&
+              (coords[0][0] !== coords[coords.length - 1][0] || coords[0][1] !== coords[coords.length - 1][1])
+            ) {
+              coords.push([...coords[0]]);
+            }
+            return coords;
+          });
+          processedFeature = {
+            ...feature,
+            geometry: {
+              type: 'Polygon',
+              coordinates: polygons
+            }
+          };
+        }
+        // أنشئ GeoJSON جديد يحتوي فقط على هذا الـ feature (بعد المعالجة)
+        const singleFeatureGeoJSON = {
+          type: 'FeatureCollection',
+          features: [processedFeature]
+        };
+        // اسم الطبقة: اسم الملف + رقم
+        const layerName = geojson.features.length > 1 ? `${kmlFile.name.replace(/\.[^/.]+$/, '')}_part${idx + 1}` : kmlFile.name.replace(/\.[^/.]+$/, '');
+        const layerInfo = this.createLayerInfo(singleFeatureGeoJSON, layerName, 'kml');
+        this.uploadedLayers.push(layerInfo);
+        this.layerAdded.emit(layerInfo);
+        this.toastService.success(`Layer ${layerName} added successfully.`);
+      });
     }
   }
 
@@ -136,13 +302,61 @@ export class FileUploadComponent {
       }
     } catch (error) {
       console.error('Error reading Shapefile:', error);
+      this.toastService.error('An error occurred while reading the Shapefile. Please check the .shp and .dbf files.');
       throw new Error('Error reading Shapefile');
     }
 
     if (geojson.features.length > 0) {
-      const layerInfo = this.createLayerInfo(geojson, shpFile.name, 'shapefile');
-      this.uploadedLayers.push(layerInfo);
-      this.layerAdded.emit(layerInfo);
+      geojson.features.forEach((feature: any, idx: number) => {
+        let processedFeature = { ...feature };
+        // إذا كان feature من نوع LineString أو MultiLineString، حوله إلى Polygon
+        if (feature.geometry && feature.geometry.type === 'LineString') {
+          let coords = [...feature.geometry.coordinates];
+          // إذا لم يكن مغلقًا، أغلقه
+          if (
+            coords.length > 2 &&
+            (coords[0][0] !== coords[coords.length - 1][0] || coords[0][1] !== coords[coords.length - 1][1])
+          ) {
+            coords.push([...coords[0]]);
+          }
+          processedFeature = {
+            ...feature,
+            geometry: {
+              type: 'Polygon',
+              coordinates: [coords]
+            }
+          };
+        } else if (feature.geometry && feature.geometry.type === 'MultiLineString') {
+          let polygons = feature.geometry.coordinates.map((line: number[][]) => {
+            let coords = [...line];
+            if (
+              coords.length > 2 &&
+              (coords[0][0] !== coords[coords.length - 1][0] || coords[0][1] !== coords[coords.length - 1][1])
+            ) {
+              coords.push([...coords[0]]);
+            }
+            return coords;
+          });
+          processedFeature = {
+            ...feature,
+            geometry: {
+              type: 'Polygon',
+              coordinates: polygons
+            }
+          };
+        }
+        // أنشئ GeoJSON جديد يحتوي فقط على هذا الـ feature (بعد المعالجة)
+        const singleFeatureGeoJSON = {
+          type: 'FeatureCollection',
+          features: [processedFeature]
+        };
+        // اسم الطبقة: اسم الملف + رقم
+        const layerName = geojson.features.length > 1 ? `${shpFile.name.replace(/\.[^/.]+$/, '')}_part${idx + 1}` : shpFile.name.replace(/\.[^/.]+$/, '');
+        const layerInfo = this.createLayerInfo(singleFeatureGeoJSON, layerName, 'shapefile');
+        this.uploadedLayers.push(layerInfo);
+        this.layerAdded.emit(layerInfo);
+        this.toastService.success(`Layer ${layerName} added successfully.`);
+      });
     }
   }
 
@@ -266,8 +480,12 @@ export class FileUploadComponent {
       this.mapView.closePopup();
     }
     
+    const removedLayer = this.uploadedLayers.find(layer => layer.id === layerId);
     this.uploadedLayers = this.uploadedLayers.filter(layer => layer.id !== layerId);
     this.layerRemoved.emit(layerId);
+    if (removedLayer) {
+      this.toastService.success(`Layer ${removedLayer.name} removed successfully.`);
+    }
   }
 
   zoomToLayer(layer: LayerInfo): void {

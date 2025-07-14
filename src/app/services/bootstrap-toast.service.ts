@@ -35,7 +35,8 @@ export class BootstrapToastService {
     // Auto remove after delay
     if (delay > 0) {
       setTimeout(() => {
-        this.remove(toast.id);
+        // بدلاً من remove، أرسل حدثاً ليتم التعامل معه في الكومبوننت
+        this.startRemoveWithAnimation(toast.id);
       }, delay);
     }
   }
@@ -67,5 +68,13 @@ export class BootstrapToastService {
 
   private generateId(): string {
     return 'toast_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  // دالة جديدة لإعلام الكومبوننت ببدء إزالة التوست مع الأنيميشن
+  private removeWithAnimationSubject = new BehaviorSubject<string | null>(null);
+  public removeWithAnimation$ = this.removeWithAnimationSubject.asObservable();
+
+  startRemoveWithAnimation(id: string) {
+    this.removeWithAnimationSubject.next(id);
   }
 } 

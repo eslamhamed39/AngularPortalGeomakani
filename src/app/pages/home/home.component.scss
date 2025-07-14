@@ -795,6 +795,24 @@ video {
   background: #cc0000;
 }
 
+.close-upload-panel-btn {
+  position: absolute;
+  top: 8px;
+  left: 15px;
+  z-index: 1100;
+  font-size: 1.5rem;
+  background: transparent;
+  border: none;
+  color: #EE4037;
+  cursor: pointer;
+  // transition: color 0.2s, background 0.2s;
+}
+// .close-upload-panel-btn:hover, .close-upload-panel-btn:focus {
+//   color: #fff;
+//   background: #EE4037;
+//   border-radius: 50%;
+// }
+
 /*--- Map ---*/
 .map {
   width: 100%;
@@ -994,26 +1012,28 @@ video {
   .parchart {
     border-radius: 15px;
   }
-  .file-upload-panel {
+  .file-upload-panel[_ngcontent-ng-c1372703361] {
     position: fixed !important;
-    top: 10px !important;
-    left: 50% !important;
+    left: 60px !important;
     right: auto !important;
-    transform: translateX(-50%) !important;
     margin-top: 0 !important;
-    width: 98vw !important;
-    max-width: 99vw !important;
-    min-width: 120px !important;
-    max-height: 55vh !important;
-    min-height: 60px !important;
-    border-radius: 8px !important;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.13) !important;
+    width: 250px !important;
+    max-width: 95vw !important;
+    min-width: 200px !important;
+    height: auto !important;
+    max-height: 70vh !important;
+    min-height: 120px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12) !important;
     z-index: 1003 !important;
     overflow: auto !important;
     padding: 0 !important;
-    display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+  }
+  .close-upload-panel-btn {
+    top: -2px;
+    left: 6px;
   }
   .file-upload-panel .upload-area {
     padding: 6px 2px !important;
@@ -1179,7 +1199,7 @@ video {
   }
   .container_data_dialog {
     flex-direction: row;
-    gap: 15px;
+    gap: 0px;
   }
   .container_dashbord {
     width: 60%;
@@ -1224,7 +1244,7 @@ video {
   }
   .container_data_dialog {
     flex-direction: column;
-    gap: 15px;
+    gap: 0px;
   }
   .container_dashbord {
     width: 100%;
@@ -1247,12 +1267,39 @@ video {
     top: 0;
     transform: none;
   }
+  .file-upload-panel[_ngcontent-ng-c1372703361] {
+    position: fixed !important;
+    left: 81px !important;
+    right: auto !important;
+    margin-top: 0 !important;
+    width: 250px !important;
+    max-width: 95vw !important;
+    min-width: 200px !important;
+    height: auto !important;
+    max-height: 70vh !important;
+    min-height: 120px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12) !important;
+    z-index: 1003 !important;
+    overflow: auto !important;
+    padding: 0 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .close-upload-panel-btn {
+    top: -2px;
+    left: 6px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
   .Side_bar {
     width: 70px;
     left: 10px;
+  }
+  .close-upload-panel-btn {
+    top: -2px;
+    left: 6px;
   }
   .list_detection {
     left: 85px;
@@ -1278,7 +1325,7 @@ video {
   }
   .container_data_dialog {
     flex-direction: row;
-    gap: 20px;
+    gap: 0px;
   }
   .container_dashbord {
     width: 60%;
@@ -1493,7 +1540,7 @@ video {
 
 @media (max-height: 850px) {
   .file-upload-panel {
-    top: -20% !important;
+    top: 0% !important;
   }
 }
 
@@ -1687,6 +1734,9 @@ video {
       bottom: 5%;
     }
   }
+
+ 
+
 }
 
 /* Fix for devices with notches */
