@@ -105,7 +105,7 @@ li {
 #icon_land {
   width: 30px;
   height: 30px;
-  background-image: url("https://i.ibb.co/xS2wWBRP/icons8-country-100.png");
+  background-image: url("../../../assets/country_orange.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -115,7 +115,7 @@ li {
 .detection_icon:hover #icon_land,
 .detection_icon:focus #icon_land,
 .detection_icon.active #icon_land {
-  background-image: url("https://img.icons8.com/ios/ffffff/country--v1.png");
+  background-image: url("../../../assets/country_White.png");
 }
 
 /*--- Detection side menu ---*/
