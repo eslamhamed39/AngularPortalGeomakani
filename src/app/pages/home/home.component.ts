@@ -193,6 +193,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.showProfileMenu = false;
       this.showFileUpload = false;
       this.closeSubmenu();
+      // مسح الطبقات المرفوعة عند العودة للصفحة الرئيسية
+      this.uploadedLayers = [];
       this.mapControl.resetMapToDefault();
     } else {
       this.activeSidebarIndex = idx;
@@ -224,6 +226,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Handle zoom request for layer
   onLayerZoomRequested(layer: LayerInfo) {
     this.zoomToLayer(layer);
+  }
+
+  onShowAllLayersRequested() {
+    // This method will be called when the "Show All Layers" button is clicked
+    // The file upload component will handle the layer restoration internally
+    console.log('Show all layers requested');
   }
 
   // Hide file upload panel when clicking on map

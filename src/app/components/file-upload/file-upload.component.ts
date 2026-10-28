@@ -28,9 +28,11 @@ export class FileUploadComponent {
   @Output() layerAdded = new EventEmitter<LayerInfo>();
   @Output() layerRemoved = new EventEmitter<string>();
   @Output() layerZoomRequested = new EventEmitter<LayerInfo>();
+  @Output() showAllLayersRequested = new EventEmitter<void>();
   @Input() mapView?: MapViewComponent;
 
   uploadedLayers: LayerInfo[] = [];
+  originalLayers: LayerInfo[] = []; // Store original layers before filtering
   isUploading = false;
   isDragover = false;
   supportedFormats = '.shp,.kml,.kmz,.geojson';
@@ -54,6 +56,9 @@ export class FileUploadComponent {
       this.mapView.closePopup();
     }
 
+    // مسح الطبقات السابقة عند رفع ملفات جديدة
+    this.clearAllLayers();
+
     this.isUploading = true;
     this.processFiles(files);
   }
@@ -69,9 +74,22 @@ export class FileUploadComponent {
     
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
+      // مسح الطبقات السابقة عند رفع ملفات جديدة
+      this.clearAllLayers();
       this.isUploading = true;
       this.processFiles(files);
     }
+  }
+
+  private clearAllLayers(): void {
+    // مسح جميع الطبقات من الخريطة
+    this.uploadedLayers.forEach(layer => {
+      this.layerRemoved.emit(layer.id);
+    });
+    
+    // مسح المصفوفات
+    this.uploadedLayers = [];
+    this.originalLayers = [];
   }
 
   private async processFiles(files: FileList): Promise<void> {
@@ -179,9 +197,12 @@ export class FileUploadComponent {
           };
           const layerName = geojson.features.length > 1 ? `${geojsonFile.name.replace(/\.[^/.]+$/, '')}_part${idx + 1}` : geojsonFile.name.replace(/\.[^/.]+$/, '');
           const layerInfo = this.createLayerInfo(singleFeatureGeoJSON, layerName, 'kml'); // type: 'kml' for now
-          this.uploadedLayers.push(layerInfo);
-          this.layerAdded.emit(layerInfo);
-          this.toastService.success(`Layer ${layerName} added successfully.`);
+          if (layerInfo) {
+            this.uploadedLayers.push(layerInfo);
+            this.originalLayers.push(layerInfo);
+            this.layerAdded.emit(layerInfo);
+            this.toastService.success(`تم إضافة الطبقة ${layerName} بنجاح.`);
+          }
         });
       }
     } catch (error) {
@@ -273,9 +294,12 @@ export class FileUploadComponent {
         // اسم الطبقة: اسم الملف + رقم
         const layerName = geojson.features.length > 1 ? `${kmlFile.name.replace(/\.[^/.]+$/, '')}_part${idx + 1}` : kmlFile.name.replace(/\.[^/.]+$/, '');
         const layerInfo = this.createLayerInfo(singleFeatureGeoJSON, layerName, 'kml');
-        this.uploadedLayers.push(layerInfo);
-        this.layerAdded.emit(layerInfo);
-        this.toastService.success(`Layer ${layerName} added successfully.`);
+        if (layerInfo) {
+          this.uploadedLayers.push(layerInfo);
+          this.originalLayers.push(layerInfo);
+          this.layerAdded.emit(layerInfo);
+          this.toastService.success(`تم إضافة الطبقة ${layerName} بنجاح.`);
+        }
       });
     }
   }
@@ -353,16 +377,26 @@ export class FileUploadComponent {
         // اسم الطبقة: اسم الملف + رقم
         const layerName = geojson.features.length > 1 ? `${shpFile.name.replace(/\.[^/.]+$/, '')}_part${idx + 1}` : shpFile.name.replace(/\.[^/.]+$/, '');
         const layerInfo = this.createLayerInfo(singleFeatureGeoJSON, layerName, 'shapefile');
-        this.uploadedLayers.push(layerInfo);
-        this.layerAdded.emit(layerInfo);
-        this.toastService.success(`Layer ${layerName} added successfully.`);
+        if (layerInfo) {
+          this.uploadedLayers.push(layerInfo);
+          this.originalLayers.push(layerInfo);
+          this.layerAdded.emit(layerInfo);
+          this.toastService.success(`تم إضافة الطبقة ${layerName} بنجاح.`);
+        }
       });
     }
   }
 
-  private createLayerInfo(geojson: any, fileName: string, type: 'shapefile' | 'kml'): LayerInfo {
+  private createLayerInfo(geojson: any, fileName: string, type: 'shapefile' | 'kml'): LayerInfo | null {
     const layerId = `uploaded_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const name = fileName.replace(/\.[^/.]+$/, ''); // Remove extension
+    
+    // التحقق من صحة الطبقة
+    const validationResult = this.validateLayer(geojson, name);
+    if (!validationResult.isValid) {
+      this.toastService.error(`الطبقة "${name}" غير صالحة: ${validationResult.reason}`);
+      return null;
+    }
     
     // Calculate area, perimeter, and center
     const { area, perimeter, center } = this.calculateGeometry(geojson);
@@ -379,6 +413,145 @@ export class FileUploadComponent {
       areaUnit: 'km',
       perimeterUnit: 'km'
     };
+  }
+
+  private validateLayer(geojson: any, layerName: string): { isValid: boolean; reason?: string } {
+    // التحقق من وجود geojson
+    if (!geojson) {
+      return { isValid: false, reason: 'الملف فارغ أو غير صالح' };
+    }
+
+    // التحقق من نوع geojson
+    if (geojson.type !== 'FeatureCollection') {
+      return { isValid: false, reason: 'نوع الملف غير صحيح (يجب أن يكون FeatureCollection)' };
+    }
+
+    // التحقق من وجود features
+    if (!geojson.features || !Array.isArray(geojson.features)) {
+      return { isValid: false, reason: 'لا توجد ميزات جغرافية في الملف' };
+    }
+
+    if (geojson.features.length === 0) {
+      return { isValid: false, reason: 'الملف لا يحتوي على أي ميزات جغرافية' };
+    }
+
+    // التحقق من كل feature
+    for (let i = 0; i < geojson.features.length; i++) {
+      const feature = geojson.features[i];
+      
+      // التحقق من وجود geometry
+      if (!feature.geometry) {
+        return { isValid: false, reason: `الميزة رقم ${i + 1} لا تحتوي على بيانات هندسية` };
+      }
+
+      // التحقق من نوع geometry
+      if (!['Polygon', 'MultiPolygon'].includes(feature.geometry.type)) {
+        return { isValid: false, reason: `نوع الميزة رقم ${i + 1} غير مدعوم (${feature.geometry.type}). الأنواع المدعومة: Polygon, MultiPolygon` };
+      }
+
+      // التحقق من وجود coordinates
+      if (!feature.geometry.coordinates || !Array.isArray(feature.geometry.coordinates)) {
+        return { isValid: false, reason: `الميزة رقم ${i + 1} لا تحتوي على إحداثيات صحيحة` };
+      }
+
+      // التحقق من صحة الإحداثيات
+      const coordValidation = this.validateCoordinates(feature.geometry);
+      if (!coordValidation.isValid) {
+        return { isValid: false, reason: `الميزة رقم ${i + 1}: ${coordValidation.reason}` };
+      }
+    }
+
+    return { isValid: true };
+  }
+
+  private validateCoordinates(geometry: any): { isValid: boolean; reason?: string } {
+    if (geometry.type === 'Polygon') {
+      if (!Array.isArray(geometry.coordinates) || geometry.coordinates.length === 0) {
+        return { isValid: false, reason: 'الإحداثيات فارغة' };
+      }
+
+      const coords = geometry.coordinates[0];
+      if (!Array.isArray(coords) || coords.length < 3) {
+        return { isValid: false, reason: 'يجب أن يحتوي المضلع على 3 نقاط على الأقل' };
+      }
+
+      // التحقق من صحة الإحداثيات
+      for (let i = 0; i < coords.length; i++) {
+        const coord = coords[i];
+        if (!Array.isArray(coord) || coord.length < 2) {
+          return { isValid: false, reason: `النقطة رقم ${i + 1} لا تحتوي على إحداثيات كافية` };
+        }
+
+        const [lng, lat] = coord;
+        if (typeof lng !== 'number' || typeof lat !== 'number') {
+          return { isValid: false, reason: `النقطة رقم ${i + 1} تحتوي على إحداثيات غير صحيحة` };
+        }
+
+        // التحقق من نطاق الإحداثيات
+        if (lng < -180 || lng > 180) {
+          return { isValid: false, reason: `خط الطول في النقطة رقم ${i + 1} خارج النطاق المسموح (-180 إلى 180)` };
+        }
+
+        if (lat < -90 || lat > 90) {
+          return { isValid: false, reason: `خط العرض في النقطة رقم ${i + 1} خارج النطاق المسموح (-90 إلى 90)` };
+        }
+      }
+
+      // التحقق من أن المضلع مغلق
+      const firstCoord = coords[0];
+      const lastCoord = coords[coords.length - 1];
+      if (firstCoord[0] !== lastCoord[0] || firstCoord[1] !== lastCoord[1]) {
+        return { isValid: false, reason: 'المضلع غير مغلق (النقطة الأولى والأخيرة يجب أن تكونا متطابقتين)' };
+      }
+
+    } else if (geometry.type === 'MultiPolygon') {
+      if (!Array.isArray(geometry.coordinates) || geometry.coordinates.length === 0) {
+        return { isValid: false, reason: 'الإحداثيات فارغة' };
+      }
+
+      for (let i = 0; i < geometry.coordinates.length; i++) {
+        const polygon = geometry.coordinates[i];
+        if (!Array.isArray(polygon) || polygon.length === 0) {
+          return { isValid: false, reason: `المضلع رقم ${i + 1} فارغ` };
+        }
+
+        const coords = polygon[0];
+        if (!Array.isArray(coords) || coords.length < 3) {
+          return { isValid: false, reason: `المضلع رقم ${i + 1} يجب أن يحتوي على 3 نقاط على الأقل` };
+        }
+
+        // التحقق من صحة الإحداثيات في كل مضلع
+        for (let j = 0; j < coords.length; j++) {
+          const coord = coords[j];
+          if (!Array.isArray(coord) || coord.length < 2) {
+            return { isValid: false, reason: `النقطة رقم ${j + 1} في المضلع رقم ${i + 1} لا تحتوي على إحداثيات كافية` };
+          }
+
+          const [lng, lat] = coord;
+          if (typeof lng !== 'number' || typeof lat !== 'number') {
+            return { isValid: false, reason: `النقطة رقم ${j + 1} في المضلع رقم ${i + 1} تحتوي على إحداثيات غير صحيحة` };
+          }
+
+          // التحقق من نطاق الإحداثيات
+          if (lng < -180 || lng > 180) {
+            return { isValid: false, reason: `خط الطول في النقطة رقم ${j + 1} في المضلع رقم ${i + 1} خارج النطاق المسموح (-180 إلى 180)` };
+          }
+
+          if (lat < -90 || lat > 90) {
+            return { isValid: false, reason: `خط العرض في النقطة رقم ${j + 1} في المضلع رقم ${i + 1} خارج النطاق المسموح (-90 إلى 90)` };
+          }
+        }
+
+        // التحقق من أن المضلع مغلق
+        const firstCoord = coords[0];
+        const lastCoord = coords[coords.length - 1];
+        if (firstCoord[0] !== lastCoord[0] || firstCoord[1] !== lastCoord[1]) {
+          return { isValid: false, reason: `المضلع رقم ${i + 1} غير مغلق (النقطة الأولى والأخيرة يجب أن تكونا متطابقتين)` };
+        }
+      }
+    }
+
+    return { isValid: true };
   }
 
   private calculateGeometry(geojson: any): { area: number, perimeter: number, center: [number, number] } {
@@ -482,9 +655,10 @@ export class FileUploadComponent {
     
     const removedLayer = this.uploadedLayers.find(layer => layer.id === layerId);
     this.uploadedLayers = this.uploadedLayers.filter(layer => layer.id !== layerId);
+    // لا نحذف من originalLayers عند الحذف اليدوي - نحتفظ بها للاستعادة
     this.layerRemoved.emit(layerId);
     if (removedLayer) {
-      this.toastService.success(`Layer ${removedLayer.name} removed successfully.`);
+      this.toastService.success(`تم حذف الطبقة ${removedLayer.name} بنجاح.`);
     }
   }
 
@@ -528,6 +702,61 @@ export class FileUploadComponent {
 
     this.layerAdded.emit(newLayer);
     this.layerZoomRequested.emit(newLayer);
+  }
+
+  showAllLayers(): void {
+    // Hide popup when showing all layers
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+    
+    // التحقق من وجود طبقات أصلية
+    if (this.originalLayers.length === 0) {
+      this.toastService.warning('لا توجد طبقات للاستعادة. يرجى رفع ملفات جديدة.');
+      return;
+    }
+    
+    // Remove all current layers from map
+    this.uploadedLayers.forEach(layer => {
+      this.layerRemoved.emit(layer.id);
+    });
+    
+    // Restore all original layers
+    this.uploadedLayers = [...this.originalLayers];
+    
+    // Add all layers back to map
+    this.uploadedLayers.forEach(layer => {
+      this.layerAdded.emit(layer);
+    });
+    
+    // Emit event to show all layers
+    this.showAllLayersRequested.emit();
+    
+    this.toastService.success('تم استعادة جميع الطبقات بنجاح.');
+  }
+
+  clearAllUploadedLayers(): void {
+    // Hide popup when clearing layers
+    if (this.mapView) {
+      this.mapView.closePopup();
+    }
+    
+    // التحقق من وجود طبقات للمسح
+    if (this.uploadedLayers.length === 0 && this.originalLayers.length === 0) {
+      this.toastService.warning('لا توجد طبقات للمسح.');
+      return;
+    }
+    
+    // Remove all layers from map
+    this.uploadedLayers.forEach(layer => {
+      this.layerRemoved.emit(layer.id);
+    });
+    
+    // Clear all arrays
+    this.uploadedLayers = [];
+    this.originalLayers = [];
+    
+    this.toastService.success('تم مسح جميع الطبقات بنجاح.');
   }
 
   // دالة مساعدة لمقارنة الإحداثيات

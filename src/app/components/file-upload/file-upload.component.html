@@ -10,23 +10,15 @@
       </p>
     </div>
 
-    <div class="upload-area" 
-         (click)="fileInput.click()"
-         (dragover)="$event.preventDefault(); isDragover = true"
-         (dragleave)="isDragover = false"
-         (drop)="onFileDrop($event)"
-         [class.dragover]="isDragover">
+    <div class="upload-area" (click)="fileInput.click()" (dragover)="$event.preventDefault(); isDragover = true"
+      (dragleave)="isDragover = false" (drop)="onFileDrop($event)" [class.dragover]="isDragover">
       <div class="upload-content">
         <i class="bi bi-file-earmark-arrow-up upload-icon"></i>
         <p>Drag files here or click to select</p>
         <small class="text-muted">Supported files: {{ supportedFormats }}</small>
       </div>
-      <input #fileInput 
-             type="file" 
-             [accept]="supportedFormats"
-             (change)="onFileSelected($event)"
-             multiple
-             style="display: none;">
+      <input #fileInput type="file" [accept]="supportedFormats" (change)="onFileSelected($event)" multiple
+        style="display: none;">
     </div>
 
     <div *ngIf="isUploading" class="upload-progress">
@@ -38,11 +30,19 @@
   </div>
 
   <div class="layers-section" *ngIf="uploadedLayers.length > 0">
-    <h6 class="layers-header">
-      <i class="bi bi-layers"></i>
-      Uploaded Layers ({{ uploadedLayers.length }})
-    </h6>
-    
+    <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+      <h6 class="layers-header">
+        <i class="bi bi-layers"></i>
+        Uploaded Layers ({{ uploadedLayers.length }})
+      </h6>
+      <button class="btn btn-sm btn-outline-success" (click)="showAllLayers()" title="Show All Layers">
+        <i class="bi bi-layers"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-danger" (click)="clearAllUploadedLayers()" title="Clear All Layers">
+        <i class="bi bi-trash3"></i>
+      </button>
+    </div>
+
     <div class="layers-list">
       <div *ngFor="let layer of uploadedLayers" class="layer-item">
         <div class="layer-header">
@@ -54,31 +54,24 @@
             </div>
           </div>
           <div class="layer-actions">
-            <button class="btn btn-sm btn-outline-primary" 
-                    (click)="zoomToLayer(layer)"
-                    title="Zoom to Layer">
+            <button class="btn btn-sm btn-outline-primary" (click)="zoomToLayer(layer)" title="Zoom to Layer">
               <i class="bi bi-zoom-in"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger" 
-                    (click)="removeLayer(layer.id)"
-                    title="Remove Layer">
+            <button class="btn btn-sm btn-outline-danger" (click)="removeLayer(layer.id)" title="Remove Layer">
               <i class="bi bi-trash"></i>
             </button>
           </div>
         </div>
-        
+
         <div class="layer-stats">
           <div class="stat-item">
             <span class="stat-label">Area:</span>
             <span class="stat-value">
               {{ formatArea(layer.area, layer.areaUnit || 'km') }}
               <div class="unit-toggle">
-                <button class="btn btn-sm btn-link" 
-                        (click)="toggleAreaUnit(layer.id, 'km')">km²</button>
-                <button class="btn btn-sm btn-link" 
-                        (click)="toggleAreaUnit(layer.id, 'm')">m²</button>
-                <button class="btn btn-sm btn-link" 
-                        (click)="toggleAreaUnit(layer.id, 'ha')">ha</button>
+                <button class="btn btn-sm btn-link" (click)="toggleAreaUnit(layer.id, 'km')">km²</button>
+                <button class="btn btn-sm btn-link" (click)="toggleAreaUnit(layer.id, 'm')">m²</button>
+                <button class="btn btn-sm btn-link" (click)="toggleAreaUnit(layer.id, 'ha')">ha</button>
               </div>
             </span>
           </div>
@@ -87,10 +80,8 @@
             <span class="stat-value">
               {{ formatPerimeter(layer.perimeter, layer.perimeterUnit || 'km') }}
               <div class="unit-toggle">
-                <button class="btn btn-sm btn-link" 
-                        (click)="togglePerimeterUnit(layer.id, 'km')">km</button>
-                <button class="btn btn-sm btn-link" 
-                        (click)="togglePerimeterUnit(layer.id, 'm')">m</button>
+                <button class="btn btn-sm btn-link" (click)="togglePerimeterUnit(layer.id, 'km')">km</button>
+                <button class="btn btn-sm btn-link" (click)="togglePerimeterUnit(layer.id, 'm')">m</button>
               </div>
             </span>
           </div>
@@ -104,4 +95,4 @@
       </div>
     </div>
   </div>
-</div> 
+</div>

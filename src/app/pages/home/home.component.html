@@ -215,7 +215,8 @@
           [mapView]="mapView"
           (layerAdded)="onLayerAdded($event)"
           (layerRemoved)="onLayerRemoved($event)"
-          (layerZoomRequested)="onLayerZoomRequested($event)">
+          (layerZoomRequested)="onLayerZoomRequested($event)"
+          (showAllLayersRequested)="onShowAllLayersRequested()">
         </app-file-upload>
       </div>
     </div>
